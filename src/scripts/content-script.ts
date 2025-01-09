@@ -18,7 +18,9 @@ chrome.runtime.onMessage.addListener(message => {
         data[k] = v
       }
     }
-    sendResponseMessage('ReadLocalStorageResponse', data)
+    sendResponseMessage('ReadLocalStorageResponse', data).catch(e => {
+      console.log(e)
+    })
   }
   return undefined
 })

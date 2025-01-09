@@ -19,12 +19,12 @@ export type MessageBase = {
 export const typedRequestListenerKey = <K extends keyof RequestMessage>(k: K): K => {
   return k
 }
-export const sendResponseMessage = <K extends keyof ResponseMessage>(k: K, data: ResponseMessage[K]): void => {
+export const sendResponseMessage = <K extends keyof ResponseMessage>(k: K, data: ResponseMessage[K]): Promise<void> => {
   const msg: MessageBase = {
     type: k,
     data: data
   }
-  chrome.runtime.sendMessage(JSON.stringify(msg))
+  return chrome.runtime.sendMessage(JSON.stringify(msg))
 }
 
 export const createMessage =
@@ -45,7 +45,7 @@ export const sendMsgToTabAndWaitForResponse = async <T extends keyof RequestMess
       const msg = JSON.parse(message)
       if (msg.type === expectedResponse) {
         chrome.runtime.onMessage.removeListener(cb)
-        resolve(JSON.parse(msg.data))
+        resolve(msg.data)
       }
       return undefined
     }

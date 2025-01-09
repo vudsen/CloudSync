@@ -23,3 +23,4 @@ dist-ssr
 *.sln
 *.sw?
 dev/content-script.iife.js
+stats.html
