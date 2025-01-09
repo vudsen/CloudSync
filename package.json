@@ -1,0 +1,38 @@
+{
+  "name": "storage-sync2-cloud",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev:popup": "node script/popup-dev/launch.mjs",
+    "prepare": "node script/prepare-dev-env.mjs",
+    "build": "tsc -b && vite build --config script/content-script-prod/script.config.ts && vite build --config script/popup-dev/pages.config.ts",
+    "build:scripts": "vite build --config script/content-script-prod/vite.config.ts",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mui/material": "^6.3.1",
+    "react": "^19",
+    "react-dom": "^19"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/node": "^20",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "chrome-types": "^0.1.329",
+    "eslint": "^9.17.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "globals": "^15.14.0",
+    "install": "^0.13.0",
+    "rollup-plugin-copy": "^3.5.0",
+    "rollup-plugin-external-globals": "^0.13.0",
+    "rollup-plugin-visualizer": "^5.14.0",
+    "typescript": "~5.6.2",
+    "typescript-eslint": "^8.18.2",
+    "vite": "^6.0.5"
+  }
+}
