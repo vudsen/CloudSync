@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 import { readConfig } from '@/plugin-data'
 import type { OSS } from '@/oss/type'
 import { createOSSInstance } from '@/oss/factory'
-import PopupContext, {CONTAINER_HEIGHT} from './context'
+import PopupContext, { CONTAINER_HEIGHT } from './context'
 import StorageList from './StorageList'
 import DataAddButton from './DataAddButton'
 
-const PopupPage = () => {
+const App = () => {
   const [oss, setOss] = useState<OSS | null>(null)
   useEffect(() => {
     (async () => {
@@ -26,15 +26,14 @@ const PopupPage = () => {
 
   return (
     <div style={{ width: 400, height: CONTAINER_HEIGHT }}>
+      <span className="font-bold">eee</span>
       <DataAddButton/>
       {
         oss ? <PopupContext.Provider value={{ oss }}>
-          <div>
-            <StorageList/>
-          </div>
+          <StorageList/>
         </PopupContext.Provider> : null
       }
     </div>
   )
 }
-export default PopupPage
+export default App

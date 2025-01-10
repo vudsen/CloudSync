@@ -1,9 +1,15 @@
 import { createRoot } from 'react-dom/client'
-import PopupPage from './PopupPage'
+import App from './App.tsx'
+import './global.css'
+import { NextUIProvider } from '@nextui-org/react'
 
 document.body.innerHTML = '<div id="app"></div>'
 
 
 const root = createRoot(document.getElementById('app')!)
 
-root.render(<PopupPage/>)
+root.render(
+  <NextUIProvider>
+    <App/>
+  </NextUIProvider>
+)
