@@ -8,15 +8,16 @@ export default defineConfig({
     react()
   ],
   base: '/popup',
-  root: path.resolve('src/pages/popup'),
+  server: {
+    port: 17000,
+    strictPort: true
+  },
   build: {
-    sourcemap: true,
-    outDir: path.resolve('dist/popup'),
-    emptyOutDir: true,
     rollupOptions: {
-      input: {
-        popup: path.resolve('src/pages/popup/index.html'),
-      },
+      input: 'popup.html',
+      output: {
+        dir: 'extension/popup',
+      }
     }
   },
   resolve: {

@@ -4,13 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev:popup": "vite build --config script/popup/vite.config.ts --watch --mode development",
+    "prepare:dev": "vite build --config script/popup/vite-dev.config.ts && vite build --config script/content-script/vite.config.ts",
+    "dev:popup": "vite --config script/popup/vite.config.ts",
     "build": "node script/build-all.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
     "@nextui-org/react": "^2.6.11",
+    "cross-iframe-rpc": "^1.0.1",
     "framer-motion": "^11.16.4",
     "react": "^19",
     "react-dom": "^19"

@@ -10,6 +10,3 @@ child_process.execSync('vite build --config script/popup/vite.config.ts', {
   stdio: 'inherit',
 })
 
-if (!fs.existsSync('dist/manifest.json')) {
-  fs.cpSync('script/manifest-dev.json', 'dist/manifest.json')
-}

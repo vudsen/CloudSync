@@ -6,17 +6,12 @@ import * as path from 'node:path'
 export default defineConfig({
   plugins: [react()],
   build: {
-    outDir: 'dist/content-scripts',
+    outDir: 'extension/content-scripts',
     lib: {
       name: 'cs',
       entry: path.resolve('src/scripts/content-script.ts'),
       formats: ['iife'],
-      fileName: 'content-script',
-    },
-    rollupOptions: {
-      output: {
-        name: 'dist/content-script.js'
-      }
+      fileName: 'index',
     },
   },
   resolve: {

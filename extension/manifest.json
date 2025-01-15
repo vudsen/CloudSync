@@ -10,12 +10,12 @@
   ],
   "host_permissions": ["<all_urls>"],
   "action": {
-    "default_popup": "popup/index.html"
+    "default_popup": "popup/popup.html"
   },
   "content_scripts": [
     {
       "js": [
-        "content-scripts/content-script.iife.js"
+        "content-scripts/index.iife.js"
       ],
       "matches": [
         "<all_urls>"
