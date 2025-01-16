@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { readConfig } from '@/plugin-data'
+import { readPageConfig } from '@/core/data.ts'
 import type { OSS } from '@/oss/type'
 import { createOSSInstance } from '@/oss/factory'
 import PopupContext, { CONTAINER_HEIGHT } from './context'
@@ -15,7 +15,7 @@ const App = () => {
         return
       }
       const url = new URL(tab.url)
-      const config = await readConfig(url.host)
+      const config = await readPageConfig(url.host)
       if (!config) {
         return
       }
@@ -26,7 +26,6 @@ const App = () => {
 
   return (
     <div style={{ width: 400, height: CONTAINER_HEIGHT }}>
-      <span className="font-bold">eee</span>
       <DataAddButton/>
       {
         oss ? <PopupContext.Provider value={{ oss }}>

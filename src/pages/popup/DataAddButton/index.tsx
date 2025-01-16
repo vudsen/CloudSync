@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import {
   Button,
   Drawer,
@@ -8,12 +8,20 @@ import {
   DrawerHeader,
   useDisclosure
 } from '@nextui-org/react'
+import type { LocalStoragePresentRef } from './LocalStoragePresent.tsx'
 import LocalStoragePresent from './LocalStoragePresent.tsx'
 
 const DataAddButton: React.FC = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const localStoragePresent = useRef<LocalStoragePresentRef>(null)
 
   const onSaveClick = (close: () => void) => {
+    const form = localStoragePresent.current!
+    if (form.isFormInvalid()) {
+      return
+    }
+    const data = form.getSelected()
+    console.log(data)
     close()
   }
 
@@ -28,7 +36,7 @@ const DataAddButton: React.FC = () => {
               <div>
                 <DrawerHeader className="flex flex-col gap-1">Local Storage Data</DrawerHeader>
                 <DrawerBody>
-                  <LocalStoragePresent/>
+                  <LocalStoragePresent ref={localStoragePresent}/>
                 </DrawerBody>
                 <DrawerFooter>
                   <Button color="danger" variant="light" onPress={onClose}>
