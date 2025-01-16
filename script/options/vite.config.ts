@@ -4,15 +4,21 @@ import * as path from 'node:path'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react()
+  ],
+  base: '/options',
+  server: {
+    port: 17001,
+    strictPort: true
+  },
   build: {
-    outDir: 'extension/content-scripts',
-    lib: {
-      name: 'cs',
-      entry: './src/scripts/content-script.ts',
-      formats: ['iife'],
-      fileName: 'index',
-    },
+    rollupOptions: {
+      input: 'options.html',
+      output: {
+        dir: 'extension/options',
+      }
+    }
   },
   resolve: {
     alias: {

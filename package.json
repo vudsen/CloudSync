@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "prepare:dev": "vite build --config script/popup/vite-dev.config.ts && vite build --config script/content-script/vite.config.ts",
+    "prepare:dev": "node script/prepare-dev.mjs",
+    "dev:options": "vite --config script/options/vite.config.ts",
     "dev:popup": "vite --config script/popup/vite.config.ts",
     "build": "node script/build-all.mjs",
     "lint": "eslint .",

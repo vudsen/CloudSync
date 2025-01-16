@@ -26,3 +26,4 @@ dev/content-script.iife.js
 stats.html
 extension/content-scripts/
 extension/popup/
+extension/options/

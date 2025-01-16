@@ -10,3 +10,7 @@ child_process.execSync('vite build --config script/popup/vite.config.ts', {
   stdio: 'inherit',
 })
 
+child_process.execSync('vite build --config script/options/vite.config.ts', {
+  stdio: 'inherit',
+})
+

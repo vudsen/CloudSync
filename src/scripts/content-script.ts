@@ -1,4 +1,4 @@
-import { sendResponseMessage, typedRequestListenerKey } from '../lib/extension'
+import { sendResponseMessage, typedRequestListenerKey } from '@/util/extension'
 
 console.log('Script loaded.')
 
