@@ -10,9 +10,9 @@
   ],
   "host_permissions": ["<all_urls>"],
   "action": {
-    "default_popup": "popup/popup.html"
+    "default_popup": "pages/popup.html"
   },
-  "options_page": "options/options.html",
+  "options_page": "pages/options.html",
   "content_scripts": [
     {
       "js": [

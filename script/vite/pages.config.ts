@@ -2,21 +2,20 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import * as path from 'node:path'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react()
   ],
-  base: '/options',
+  base: '/pages',
   server: {
-    port: 17001,
+    port: 17000,
     strictPort: true
   },
   build: {
     rollupOptions: {
-      input: 'options.html',
+      input: ['options.html', 'popup.html'],
       output: {
-        dir: 'extension/options',
+        dir: 'extension/pages',
       }
     }
   },

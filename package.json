@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "prepare:dev": "node script/prepare-dev.mjs",
-    "dev:options": "vite --config script/options/vite.config.ts",
-    "dev:popup": "vite --config script/popup/vite.config.ts",
+    "dev": "vite --config script/vite/pages.config.ts",
     "build": "node script/build-all.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
