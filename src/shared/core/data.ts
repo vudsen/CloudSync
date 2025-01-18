@@ -2,7 +2,7 @@
  * 存储
  */
 import type { BaseOSSConfig } from '../oss/type.ts'
-import type { OSSDescription } from '@/oss/factory.ts'
+import type { OSSDescription } from '../oss/factory.ts'
 
 const KEY_PAGE_CONFIG_PREFIX = 'page:'
 // const KEY_ALL_CONFIGS_PREFIX = 'page:all'

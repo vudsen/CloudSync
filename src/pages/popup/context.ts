@@ -1,5 +1,5 @@
 import { createContext } from 'react'
-import type { OSS } from '@/oss/type'
+import type { OSS } from '../../shared/oss/type'
 
 type MyContext = {
   oss: OSS

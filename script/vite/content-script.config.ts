@@ -16,7 +16,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.resolve('src/lib'),
+      '@': path.resolve('src/shared'),
     },
   },
 })

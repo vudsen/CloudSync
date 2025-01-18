@@ -1,4 +1,4 @@
-import type { BaseOSSConfig, OSS } from '../type'
+import type { BaseOSSConfig, OSS } from '../type.ts'
 
 export type LocalOSSConfig = BaseOSSConfig & {
   namespace: string

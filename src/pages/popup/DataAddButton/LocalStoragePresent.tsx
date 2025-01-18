@@ -2,7 +2,7 @@ import type { PropsWithRef } from 'react'
 import { useRef } from 'react'
 import { useImperativeHandle } from 'react'
 import React, { useEffect, useState } from 'react'
-import { sendMsgToTabAndWaitForResponse } from '@/util/extension'
+import { sendMsgToTabAndWaitForResponse } from '../../../shared/util/extension'
 import {
   Alert,
   Button, Code, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem,
@@ -11,8 +11,8 @@ import {
 } from '@nextui-org/react'
 import type { Selection } from '@react-types/shared'
 import type { StorageItem } from '@/core/data.ts'
-import type { OSSDescription } from '@/oss/factory.ts'
-import { supportedOSS } from '@/oss/factory.ts'
+import type { OSSDescription } from '../../../shared/oss/factory.ts'
+import { supportedOSS } from '../../../shared/oss/factory.ts'
 
 type SelectedData = {
   table: StorageItem[]

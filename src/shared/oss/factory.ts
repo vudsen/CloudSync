@@ -1,7 +1,7 @@
-import type { BaseOSSConfig, OSS } from '@/oss/type'
-import type { LocalOSSConfig } from '@/oss/remote/local'
-import { LocalOSS } from '@/oss/remote/local'
-import { requireNonNull } from '@/util/common'
+import type { BaseOSSConfig, OSS } from './type.ts'
+import type { LocalOSSConfig } from './remote/local.ts'
+import { LocalOSS } from './remote/local.ts'
+import { requireNonNull } from '../util/common.ts'
 
 export const createOSSInstance = (config: BaseOSSConfig) : OSS => {
   if (config.type === 'local') {
