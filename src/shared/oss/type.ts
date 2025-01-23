@@ -12,6 +12,11 @@ export interface OSS {
   getConfig(): BaseOSSConfig
 }
 
+export enum OssType {
+  BROWSER_ACCOUNT = 'Browser Account',
+  LOCAL = 'Local Account',
+}
+
 export type BaseOSSConfig = {
-  type: string
+  type: OssType
 }
