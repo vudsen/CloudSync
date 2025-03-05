@@ -15,8 +15,8 @@ importers:
         specifier: ^2.5.0
         version: 2.5.0(react-redux@9.2.0(@types/react@19.0.7)(react@19.0.0)(redux@5.0.1))(react@19.0.0)
       cross-iframe-rpc:
-        specifier: ^1.1.0
-        version: 1.1.0
+        specifier: ^1.1.1
+        version: 1.1.1
       framer-motion:
         specifier: ^11.16.4
         version: 11.16.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -1738,8 +1738,8 @@ packages:
     resolution: {integrity: sha512-9Kr/j4O16ISv8zBBhJoi4bXOYNTkFLOqSL3UDB0njXxCXNezjeyVrJyGOWtgfs/q2km1gwBcfH8q1yEGoMYunA==}
     engines: {node: '>=18'}
 
-  cross-iframe-rpc@1.1.0:
-    resolution: {integrity: sha512-FOu1cEhbGxRvzzsL8VVJhvVCA37cURJBOfNEbKU13fcPMMiCZmdETkE12aIL3ihKXOAuCRDO59E1/09CKuaIew==}
+  cross-iframe-rpc@1.1.1:
+    resolution: {integrity: sha512-eZGcxKOUy2292eMbsygHlxLpCwndNrMY3p35MQu6PJphvSLRupTNUzaznJjP0+T58di3EMB6VMUxxcnKB/HIFw==}
 
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
@@ -5062,7 +5062,7 @@ snapshots:
 
   cookie@1.0.2: {}
 
-  cross-iframe-rpc@1.1.0:
+  cross-iframe-rpc@1.1.1:
     dependencies:
       quick-lru: 7.0.0
 
