@@ -1,8 +1,16 @@
 import type { BaseOSSConfig, OSS } from '../type.ts'
+import { OssType } from '../type.ts'
 
-export type LocalOSSConfig = BaseOSSConfig & {
-  namespace: string
+export class LocalOSSConfig implements BaseOSSConfig {
+  type: OssType = OssType.LOCAL
+  readonly id: string = '_$local'
   useSync: boolean
+
+
+  constructor(useSync: boolean) {
+    this.useSync = useSync
+  }
+
 }
 
 export class LocalOSS implements OSS {
@@ -17,17 +25,17 @@ export class LocalOSS implements OSS {
   
   private readonly KEY_VALUE_PREFIX
   
-  private config: LocalOSSConfig
+  private readonly config: LocalOSSConfig
   
-  constructor(useSync: boolean, namespace: string) {
+  constructor(useSync: boolean) {
     this.storage = useSync ? chrome.storage.sync : chrome.storage.local
-    this.KEY_KEYS_INDICATOR = `${namespace}:keys`
-    this.KEY_VALUE_PREFIX = `${namespace}:key:`
-    this.config = {
-      type: 'local',
-      namespace,
-      useSync
-    }
+    this.KEY_KEYS_INDICATOR = 'local:keys'
+    this.KEY_VALUE_PREFIX = 'local:key:'
+    this.config = new LocalOSSConfig(useSync)
+  }
+
+  usedBytes(): Promise<number> {
+    return this.storage.getBytesInUse()
   }
 
   private async readKeys(): Promise<string[]> {

@@ -1,6 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { persistStore, persistReducer } from 'redux-persist'
-import type { PersistConfig, WebStorage } from 'redux-persist/es/types'
+import type { WebStorage } from 'redux-persist/es/types'
+import type { OssState } from '@/store/oss/ossSlice'
+import ossReducer from '@/store/oss/ossSlice'
 import type { StatisticsState } from '@/store/statistics/statisticsSlice'
 import statisticsReducer from '@/store/statistics/statisticsSlice'
 
@@ -20,15 +22,15 @@ const chromeStorage: WebStorage = {
   }
 }
 
-const persistConfig: PersistConfig<StatisticsState> = {
-  key: 'root',
-  storage: chromeStorage
-}
 
 const store = configureStore({
   reducer: {
-    statistics: persistReducer(persistConfig, statisticsReducer),
-  }
+    statistics: persistReducer<StatisticsState>({ key: 'statistics', storage: chromeStorage, }, statisticsReducer),
+    oss: persistReducer<OssState>({ key: 'root', storage: chromeStorage }, ossReducer)
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: false
+  })
 })
 
 const persistor = persistStore(store)

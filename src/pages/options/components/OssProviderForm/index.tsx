@@ -1,44 +1,44 @@
 import type { BaseOSSConfig, OssType } from '@/oss/type.ts'
-import React, { useEffect, useState } from 'react'
+import React, { type Ref, useEffect, useState } from 'react'
 import { getUiProvider } from '../../oss-ui/factory.ts'
 import OssSelector from '@/component/OssSelector.tsx'
-import type { OssUiProvider } from '../../oss-ui/types.ts'
+import type { ConfigFormComponentRef, OssUiProvider } from '../../oss-ui/types.ts'
 
 export interface OssProviderFormProps {
   updateEntity?: BaseOSSConfig
-  onFinish?: (config: BaseOSSConfig) => void
-}  
+  ref?: Ref<ConfigFormComponentRef>
+}
 
-const RenderUiProvider: React.FC<{provider: OssUiProvider}> = props => {
-  const [supportedUI, setSupportedUI] = useState<React.ReactNode | null>(null)
+const RenderUiProvider: React.FC<{provider: OssUiProvider, ref?: Ref<ConfigFormComponentRef>}> = props => {
+  const [errorNode, setErrorNode] = useState<React.ReactNode | null>(null)
   const OssForm = props.provider.ConfigFormComponent
-  
-  
+
   useEffect(() => {
     props.provider.isSupported().then(n => {
-      setSupportedUI(n)
+      setErrorNode(n)
     })
   }, [props.provider])
   
   return (
     <div>
-      { supportedUI }
-      { supportedUI ? <OssForm/> : null}
+      { errorNode }
+      { errorNode ? null : <OssForm ref={props.ref}/>}
     </div>
   )
-  
 }
 
-const OssProviderForm: React.FC<OssProviderFormProps> = () => {
+/**
+ * Oss 配置表单
+ */
+const OssProviderForm: React.FC<OssProviderFormProps> = (props) => {
   const [ossType, setOssType] = useState<OssType>()
   const uiProvider = getUiProvider(ossType)
 
-  console.log(uiProvider, ossType)
   return (
     <div>
       <OssSelector onChange={setOssType}/>
       {
-        uiProvider ? <RenderUiProvider provider={uiProvider} /> : null
+        uiProvider ? <RenderUiProvider provider={uiProvider} ref={props.ref}/> : null
       }
     </div>
   )

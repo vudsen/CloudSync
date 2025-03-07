@@ -1,7 +1,7 @@
+import '@/dev/iframe-setup.ts'
 import { createRoot } from 'react-dom/client'
 import { NextUIProvider } from '@nextui-org/react'
 import './global.css'
-import iframeSetup from '@/dev/iframe-setup.ts'
 import { BrowserRouter } from 'react-router'
 import RootRoutes from './routes.tsx'
 import { Provider } from 'react-redux'
@@ -11,7 +11,6 @@ import './oss-ui/init.ts'
 
 document.body.innerHTML = '<div id="app"></div>'
 
-iframeSetup()
 
 const root = createRoot(document.getElementById('app')!)
 

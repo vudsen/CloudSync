@@ -1,63 +1,31 @@
 import type { OssUiProvider } from '../types.ts'
-import React, { useEffect } from 'react'
-import { Button } from '@nextui-org/react'
-import { accessProperty } from 'cross-iframe-rpc'
+import { useImperativeHandle, useState } from 'react'
 import { registerUiProvider } from '../factory.ts'
 import { OssType } from '@/oss/type.ts'
+import { LocalOSSConfig } from '@/oss/remote/local.ts'
+import { Checkbox } from '@nextui-org/react'
 
-type Delegate = {
-  isSupported(): Promise<React.ReactNode | null>
-  getUsedBytes: () => Promise<number>
-}
-
-
-const ossProviderTemplate = (delegate: Delegate): OssUiProvider => {
-  return {
-    isSupported: delegate.isSupported,
-    ConfigFormComponent: () => {
-      const [usedBytes, setUsedBytes] = React.useState<number>(-1)
-
-      useEffect(() => {
-        delegate.getUsedBytes().then(r => {
-          setUsedBytes(r)
-        })
-      }, [])
-
-      return (
-        <div>
-          Used bytes: {usedBytes}
-          <Button color="primary">Confirm</Button>
-        </div>
-      )
-    }
-  }
-}
-
-const localStorageProvider = ossProviderTemplate({
-  isSupported(): Promise<React.ReactNode | null> {
+const localOssProvider: OssUiProvider = {
+  isSupported() {
     return Promise.resolve(null)
   },
-  getUsedBytes(): Promise<number> {
-    return chrome.storage.local.getBytesInUse()
-  }
-})
+  ConfigFormComponent: (props) => {
+    const [useSync, setUseSync] = useState(false)
 
-const remoteStorageProvider = ossProviderTemplate({
-  async isSupported(): Promise<React.ReactNode | null> {
-    console.log('bbb')
-    const sync = await accessProperty(chrome.storage.sync)
-    console.log('sss')
-    if (!sync) {
-      return (
-        <div>Not login</div>
-      )
-    }
-    return null
-  },
-  getUsedBytes(): Promise<number> {
-    return chrome.storage.sync.getBytesInUse()
-  }
-})
+    useImperativeHandle(props.ref, () => ({
+      apply: () => {
+        return new LocalOSSConfig(useSync)
+      }
+    }))
 
-registerUiProvider(OssType.LOCAL, localStorageProvider)
-registerUiProvider(OssType.BROWSER_ACCOUNT, remoteStorageProvider)
+    return (
+      <div>
+        <Checkbox isSelected={useSync} onValueChange={setUseSync}>
+          Sync Data To Cloud
+        </Checkbox>
+      </div>
+    )
+  }
+}
+
+registerUiProvider(OssType.LOCAL, localOssProvider)

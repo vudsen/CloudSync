@@ -1,6 +1,6 @@
 import React from 'react'
 import SavedSites from './SavedSites.tsx'
-import OssProviders from './OssProviders.tsx'
+import OssProviders from './OssProviders/OssProviders.tsx'
 
 const Overview: React.FC = () => {
   return (

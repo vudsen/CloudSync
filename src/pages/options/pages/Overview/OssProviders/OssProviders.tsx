@@ -10,12 +10,30 @@ import {
   TableHeader,
   TableRow, useDisclosure
 } from '@nextui-org/react'
-import React from 'react'
-import OssProviderForm from '../../components/OssProviderForm'
+import React, { useRef } from 'react'
+import OssProviderForm from '../../../components/OssProviderForm'
+import type { ConfigFormComponentRef } from '../../../oss-ui/types.ts'
+import { useAppDispatch, useAppSelector } from '@/store/hooks.ts'
+import { createNewOss } from '@/store/oss/ossSlice.ts'
+import { UsedSize } from './UsedSize.tsx'
+
+
 
 const OssProviders:React.FC = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  const temp: string[] = []
+  const dispatch = useAppDispatch()
+  const configs = useAppSelector(state => state.oss.configs)
+  const form = useRef<ConfigFormComponentRef>(null)
+
+  const onSave = () => {
+    const data = form.current!.apply()
+    if (!data) {
+      return
+    }
+    dispatch(createNewOss(data))
+    onOpenChange()
+  }
+
   return (
     <div>
       <Card className="my-8">
@@ -32,14 +50,17 @@ const OssProviders:React.FC = () => {
             <TableHeader>
               <TableColumn key="host">OSS Name</TableColumn>
               <TableColumn key="lastUpdate">Used Size</TableColumn>
-              <TableColumn key="type">Saved sites</TableColumn>
               <TableColumn key="actions">Actions</TableColumn>
             </TableHeader>
             <TableBody emptyContent="No OSS available.">
               {
-                temp.map((_, index) => (
-                  <TableRow key={index}>
-                    <TableCell>ee</TableCell>
+                configs.map((provider) => (
+                  <TableRow key={provider.type}>
+                    <TableCell>{provider.type}</TableCell>
+                    <TableCell><UsedSize config={provider}/></TableCell>
+                    <TableCell>
+                      <Button color="danger" variant="flat">Delete</Button>
+                    </TableCell>
                   </TableRow>
                 ))
               }
@@ -56,14 +77,14 @@ const OssProviders:React.FC = () => {
                   Create New Oss Provider
                 </DrawerHeader>
                 <DrawerBody>
-                  <OssProviderForm/>
+                  <OssProviderForm ref={form}/>
                 </DrawerBody>
                 <DrawerFooter>
                   <Button color="danger" variant="flat" onPress={onClose}>
                     Close
                   </Button>
-                  <Button color="primary" onPress={onClose}>
-                    Sign in
+                  <Button color="primary" onPress={onSave}>
+                    Save
                   </Button>
                 </DrawerFooter>
               </>

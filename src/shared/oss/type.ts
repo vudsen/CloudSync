@@ -1,8 +1,3 @@
-
-export type OSSItem = {
-  name: string
-}
-
 export interface OSS {
   listKeys(): Promise<string[]>
   update(name: string, data: string): Promise<void>
@@ -10,13 +5,17 @@ export interface OSS {
   query(name: string): Promise<string>
   insert(name: string, data: string): Promise<void>
   getConfig(): BaseOSSConfig
+  /**
+   * 已使用的空间
+   */
+  usedBytes(): Promise<number>
 }
 
 export enum OssType {
-  BROWSER_ACCOUNT = 'Browser Account',
   LOCAL = 'Local Account',
 }
 
 export type BaseOSSConfig = {
   type: OssType
+  id: string
 }

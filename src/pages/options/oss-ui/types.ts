@@ -1,9 +1,18 @@
 import type { BaseOSSConfig } from '@/oss/type.ts'
+import type { Ref } from 'react'
 import type React from 'react'
 
 export interface OssConfigProps {
   updateEntity?: BaseOSSConfig
   onFinish?: (config: BaseOSSConfig) => void
+  ref?: Ref<ConfigFormComponentRef>
+}
+
+export interface ConfigFormComponentRef {
+  /**
+   * 获取表单数据，返回空表示校验失败
+   */
+  apply: () => BaseOSSConfig | undefined
 }
 
 export interface OssUiProvider {
