@@ -2,7 +2,7 @@ export interface OSS {
   listKeys(): Promise<string[]>
   update(name: string, data: string): Promise<void>
   delete(name: string): Promise<void>
-  query(name: string): Promise<string>
+  query(name: string): Promise<string | undefined>
   insert(name: string, data: string): Promise<void>
   getConfig(): BaseOSSConfig
   /**

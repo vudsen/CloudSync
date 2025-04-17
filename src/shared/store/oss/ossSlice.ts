@@ -31,7 +31,6 @@ export type OssState = {
   configs: BaseOSSConfig[]
   /**
    * key 为网站域名
-   * 
    */
   index: OssIndexRecord
 }

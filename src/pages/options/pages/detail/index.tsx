@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router'
+import { useNavigate, useSearchParams } from 'react-router'
 import {
   Card,
   CardBody,
@@ -23,6 +23,7 @@ const SiteDetail: React.FC = () => {
   const index = useSelector<RootState, HostData[] | undefined>(
     state => host ? state.oss.index[host] : undefined
   )
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
   if (!index || !host) {
     return (
@@ -33,7 +34,7 @@ const SiteDetail: React.FC = () => {
   }
 
   const viewData = (id: string) => {
-    console.log(id)
+    navigate(`/detail/view?${new URLSearchParams({ host, id }).toString()}`)
   }
 
   const deleteData = (id: string) => {
@@ -61,7 +62,7 @@ const SiteDetail: React.FC = () => {
                   <TableCell>{idx.name}</TableCell>
                   <TableCell>{idx.updateDate}</TableCell>
                   <TableCell>
-                    <Link color="primary" underline="hover" className="cursor-pointer" onPress={() => viewData(idx.remoteKey)}>View</Link>
+                    <Link color="primary" underline="hover" className="cursor-pointer" onPress={() => viewData(idx.id)}>View</Link>
                     <Link color="danger" underline="hover" className="cursor-pointer mx-3" onPress={() => deleteData(idx.id)}>Delete</Link>
                   </TableCell>
                 </TableRow>

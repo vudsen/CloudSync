@@ -72,9 +72,8 @@ export class LocalOSS implements OSS {
       [this.KEY_KEYS_INDICATOR]: JSON.stringify(keys),
     })
   }
-  async query(name: string): Promise<string> {
+  async query(name: string): Promise<string | undefined> {
     const o = await this.storage.get(this.KEY_VALUE_PREFIX + name)
-    console.log(o)
     return o[this.KEY_VALUE_PREFIX + name]
   }
   async insert(name: string, data: string): Promise<void> {

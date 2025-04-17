@@ -15,12 +15,17 @@ import { useSelector } from 'react-redux'
 import type { RootState } from '@/store'
 import type { OssIndexRecord } from '@/store/oss/ossSlice.ts'
 import { useNavigate } from 'react-router'
+import type { BasicRouteState } from '../../options-type.ts'
 
 const SavedSites: React.FC = () => {
   const hosts = useSelector<RootState, OssIndexRecord>((state) => state.oss.index)
   const navigate = useNavigate()
   const toHostDetail = (host: string) => {
-    navigate('/detail?host=' + host)
+    navigate('/detail?host=' + host, {
+      state: {
+        pageName: host,
+      } satisfies BasicRouteState
+    })
   }
 
   return (
