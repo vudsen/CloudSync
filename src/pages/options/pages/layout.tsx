@@ -1,54 +1,47 @@
-import React, { useRef } from 'react'
-import { Outlet, useNavigate } from 'react-router'
-import { Tab, Tabs } from '@nextui-org/react'
+import React from 'react'
+import { Outlet, useLocation, useNavigate } from 'react-router'
+import { Button } from '@nextui-org/react'
 
 
 const Layout: React.FC = () => {
   const navigate = useNavigate()
-  const lastRoute = useRef<string>(null)
-  const onSelectChange = (k: string | number) => {
-    if (typeof k !== 'string') {
-      throw new Error('Unexpected type: ' + k)
-    }
-    k = k.toLowerCase()
-    let des: string
-    if (k === 'overview') {
-      des = '/'
-    } else {
-      des = '/' + k
-    }
-    if (lastRoute.current) {
-      if (lastRoute.current !== des) {
-        lastRoute.current = des
-        navigate(des)
-      }
-    } else {
-      lastRoute.current = des
-    }
-  }
+  const location = useLocation()
+  // const matches = useMatches()
 
   return (
     <div className="w-full">
-      <Tabs aria-label="Options" classNames={{
-        tabList: 'gap-6 w-full relative rounded-none p-0 border-b border-divider justify-center',
-        cursor: 'w-full bg-blue-600',
-        tab: 'max-w-fit px-0 h-12',
-        tabContent: 'group-data-[selected=true]:text-blue-600 text-base font-bold',
-        base: 'w-full bg-primary-100',
-      }}
-      onSelectionChange={onSelectChange}
-      color="default"
-      variant="underlined">
-        <Tab key="Overview" title="Overview">
+      <div className="flex">
+        <div className="w-[10rem]">
+          <div className="flex flex-col border border-gray-200 h-full fixed left-0 top-0 w-[10rem]">
+            <div className="text-center m-3 text-primary text-2xl">
+              My Logo
+            </div>
+            <div className="flex flex-col">
+              <Button radius="none" variant="light" onPress={() => navigate('/')}>
+                <span className={location.pathname === '/' ? 'font-bold' : ''}>Home</span>
+              </Button>
+              <Button radius="none" variant="light" onPress={() => navigate('/storages')}>
+                <span className={location.pathname === '/storages' ? 'font-bold' : ''}>Storages</span>
+              </Button>
+              <Button radius="none" variant="light" onPress={() => navigate('/settings')}>
+                <span className={location.pathname === '/settings' ? 'font-bold' : ''}>Settings</span>
+              </Button>
+            </div>
+          </div>
+        </div>
+        <div className="flex-1">
+          {/*<div>*/}
+          {/*<Breadcrumbs>*/}
+          {/*  {matches.map(v => (*/}
+          {/*    v.handle && (v.handle as RouteMeta).name ? (*/}
+          {/*      <BreadcrumbItem key={v.id}>{(v.handle as RouteMeta).name}</BreadcrumbItem>*/}
+          {/*    ) : null*/}
+          {/*  ))}*/}
+          {/*</Breadcrumbs>*/}
+          {/*</div>*/}
           <Outlet/>
-        </Tab>
-        <Tab key="Storages" title="Storages">
-          <Outlet/>
-        </Tab>
-        <Tab key="Settings" title="Seetings">
-          <Outlet/>
-        </Tab>
-      </Tabs>
+        </div>
+      </div>
     </div>
   )
 }

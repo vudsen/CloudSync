@@ -1,22 +1,47 @@
-import { Routes, Route } from 'react-router'
+import { createBrowserRouter } from 'react-router'
 import React from 'react'
 import Layout from './pages/layout.tsx'
+import type { RouteMeta } from './options-type.ts'
 
-const OverView = React.lazy(() => import('./pages/Overview'))
-const Settings = React.lazy(() => import('./pages/Settings'))
-const Storages = React.lazy(() => import('./pages/Storages'))
+const OverView = React.lazy(() => import('./pages/(Home)'))
+const Settings = React.lazy(() => import('./pages/settings'))
+const Storages = React.lazy(() => import('./pages/storages'))
+const SiteDetail = React.lazy(() => import('./pages/detail'))
 
-
-const RootRoutes: React.FC = () => {
-  return (
-    <Routes>
-      <Route element={<Layout/>}>
-        <Route index element={<OverView/>} />
-        <Route path="settings" element={<Settings/>} />
-        <Route path="storages" element={<Storages/>} />
-      </Route>
-    </Routes>
-  )
-}
+const RootRoutes = createBrowserRouter([
+  {
+    element: <Layout />,
+    children: [
+      {
+        path: '/',
+        element: <OverView/>,
+        handle: {
+          name: 'Home',
+        } as RouteMeta
+      },
+      {
+        path: '/settings',
+        element: <Settings/>,
+        handle: {
+          name: 'Settings',
+        } as RouteMeta
+      },
+      {
+        path: '/storages',
+        element: <Storages/>,
+        handle: {
+          name: 'Storages',
+        } as RouteMeta
+      },
+      {
+        path: '/detail',
+        element: <SiteDetail/>,
+        handle: {
+          name: 'Detail',
+        } as RouteMeta
+      }
+    ]
+  }
+], { basename: '/pages/options.html' })
 
 export default RootRoutes

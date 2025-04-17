@@ -18,4 +18,5 @@ export enum OssType {
 export type BaseOSSConfig = {
   type: OssType
   id: string
+  name: string
 }

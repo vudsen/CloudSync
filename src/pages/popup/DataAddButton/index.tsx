@@ -6,14 +6,17 @@ import {
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  useDisclosure
+  useDisclosure,
 } from '@nextui-org/react'
 import type { LocalStoragePresentRef } from './LocalStoragePresent.tsx'
 import LocalStoragePresent from './LocalStoragePresent.tsx'
+import { savePageData } from '@/store/oss/ossSlice.ts'
+import { useAppDispatch } from '@/store/hooks.ts'
 
 const DataAddButton: React.FC = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const localStoragePresent = useRef<LocalStoragePresentRef>(null)
+  const dispatch = useAppDispatch()
 
   const onSaveClick = (close: () => void) => {
     const form = localStoragePresent.current!
@@ -21,7 +24,17 @@ const DataAddButton: React.FC = () => {
       return
     }
     const data = form.getSelected()
-    console.log(data)
+    console.log('1111111111111111', data)
+    dispatch(
+      savePageData({
+        config: data.oss,
+        name: data.name,
+        items: data.table,
+        host: new URL(data.url).host
+      })
+    ).catch(e => {
+      console.log(e)
+    })
     close()
   }
 

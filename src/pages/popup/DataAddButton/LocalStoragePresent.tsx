@@ -4,19 +4,20 @@ import React, { useEffect, useState } from 'react'
 import { sendMsgToTabAndWaitForResponse } from '@/util/extension.ts'
 import {
   Alert,
-  Button, Code, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem,
+  Button, Code, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem,
   Table, TableBody, TableCell, TableColumn,
   TableHeader, TableRow, Tooltip, useDisclosure,
 } from '@nextui-org/react'
 import type { Selection } from '@react-types/shared'
 import type { StorageItem } from '@/core/data.ts'
-import type { OSSDescription } from '@/oss/factory.ts'
-import { supportedOSS } from '@/oss/factory.ts'
+import { useAppSelector } from '@/store/hooks.ts'
+import type { BaseOSSConfig } from '@/oss/type.ts'
 
 type SelectedData = {
   table: StorageItem[]
   url: string
-  oss: OSSDescription
+  oss: BaseOSSConfig
+  name: string
 }
 
 export type LocalStoragePresentRef = {
@@ -34,8 +35,10 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
   const [ storage, setStorage ] = useState<StorageItem[]>([])
   const [ selectedItems, setSelectedItem ] = useState<StorageItem>({ name: '', data: '' })
   const [ currentUrl, setCurrentUrl ] = useState<string>('')
+  const [ name, setName ] = useState<string>('')
   const select = useRef<HTMLSelectElement>(null)
   const [ tableEmptyAlertVisible, setTableEmptyAlertVisible ] = useState(false)
+  const configs = useAppSelector(state => state.oss.configs)
 
   useImperativeHandle(props.ref, () => ({
     getSelected: () => {
@@ -50,7 +53,8 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
       return {
         table,
         url: currentUrl,
-        oss: supportedOSS[select.current!.selectedIndex - 1]
+        oss: configs[select.current!.selectedIndex - 1],
+        name
       }
     },
     isFormInvalid: () => {
@@ -128,23 +132,17 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
       </Modal>
       <div>
         <Select label="Select a OSS Provider" size="sm" color="primary" isRequired ref={select}>
-          { 
-            supportedOSS.map(oss => (
+          {
+            configs.map(oss => (
               <SelectItem key={oss.name} classNames={{
                 base: '[&>*:nth-child(1)]:overflow-hidden',
-              }} startContent={
-                <Tooltip content={oss.description}>
-                  <div className="text-ellipsis overflow-hidden whitespace-nowrap">
-                    {oss.name}
-                    <span className="text-slate-500 ext-ellipsis text-xs"> {oss.description}</span>
-                  </div>
-                </Tooltip>
-              }>
+              }}>
                 {oss.name}
               </SelectItem>
             ))
           }
         </Select>
+        <Input placeholder="Name" value={name} onValueChange={setName} />
         <div className="my-4">
           {
             tableEmptyAlertVisible ? <Alert hideIcon color="danger" description="At least select one table item"/> : null
@@ -163,7 +161,9 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
             <TableColumn>Name</TableColumn>
             <TableColumn>Action</TableColumn>
           </TableHeader>
-          <TableBody items={storage} emptyContent={`No data on ${currentUrl}`}>
+          <TableBody items={storage} emptyContent={
+            <p className="text-ellipsis overflow-hidden">No data on {currentUrl}</p>
+          }>
             {(item) => (
               <TableRow key={item.name}>
                 <TableCell>

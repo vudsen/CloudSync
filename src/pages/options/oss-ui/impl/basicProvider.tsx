@@ -2,7 +2,7 @@ import type { OssUiProvider } from '../types.ts'
 import { useImperativeHandle, useState } from 'react'
 import { registerUiProvider } from '../factory.ts'
 import { OssType } from '@/oss/type.ts'
-import { LocalOSSConfig } from '@/oss/remote/local.ts'
+import { createLocalConfig } from '@/oss/remote/local.ts'
 import { Checkbox } from '@nextui-org/react'
 
 const localOssProvider: OssUiProvider = {
@@ -14,7 +14,7 @@ const localOssProvider: OssUiProvider = {
 
     useImperativeHandle(props.ref, () => ({
       apply: () => {
-        return new LocalOSSConfig(useSync)
+        return createLocalConfig(useSync)
       }
     }))
 

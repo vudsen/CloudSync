@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   CardBody,
   CardHeader,
@@ -12,11 +13,16 @@ import {
 import React from 'react'
 import { useSelector } from 'react-redux'
 import type { RootState } from '@/store'
-import type { SavedHost } from '@/store/statistics/statisticsSlice.ts'
+import type { OssIndexRecord } from '@/store/oss/ossSlice.ts'
+import { useNavigate } from 'react-router'
 
 const SavedSites: React.FC = () => {
-  const hosts = useSelector<RootState, SavedHost[]>((state) => state.statistics.savedHosts)
-  
+  const hosts = useSelector<RootState, OssIndexRecord>((state) => state.oss.index)
+  const navigate = useNavigate()
+  const toHostDetail = (host: string) => {
+    navigate('/detail?host=' + host)
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -28,18 +34,18 @@ const SavedSites: React.FC = () => {
         <Table>
           <TableHeader>
             <TableColumn key="host">Host</TableColumn>
-            <TableColumn key="lastUpdate">Last Update</TableColumn>
-            <TableColumn key="type">Storage Type</TableColumn>
+            <TableColumn key="type">Record Count</TableColumn>
             <TableColumn key="actions">Actions</TableColumn>
           </TableHeader>
           <TableBody emptyContent={'Nothing saved.'}>
             {
-              hosts.map(host => (
-                <TableRow key={host.host}>
-                  <TableCell>{host.host}</TableCell>
-                  <TableCell>TODO</TableCell>
-                  <TableCell>{host.type}</TableCell>
-                  <TableCell>Actions</TableCell>
+              Object.entries(hosts).map(([host, idx]) => (
+                <TableRow key={host}>
+                  <TableCell>{host}</TableCell>
+                  <TableCell>{idx.length}</TableCell>
+                  <TableCell>
+                    <Button color="primary" variant="light" onPress={() => toHostDetail(host)}>Detail</Button>
+                  </TableCell>
                 </TableRow>
               ))
             }

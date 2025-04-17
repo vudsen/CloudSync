@@ -1,16 +1,19 @@
 import type { BaseOSSConfig, OSS } from '../type.ts'
 import { OssType } from '../type.ts'
 
-export class LocalOSSConfig implements BaseOSSConfig {
-  type: OssType = OssType.LOCAL
-  readonly id: string = '_$local'
+const CONSTANT_ID = '_$local' 
+
+export type LocalOSSConfig = BaseOSSConfig & {
   useSync: boolean
+}
 
-
-  constructor(useSync: boolean) {
-    this.useSync = useSync
+export function createLocalConfig(useSync: boolean): LocalOSSConfig {
+  return {
+    useSync,
+    id: CONSTANT_ID,
+    name: 'Local',
+    type: OssType.LOCAL
   }
-
 }
 
 export class LocalOSS implements OSS {
@@ -31,7 +34,7 @@ export class LocalOSS implements OSS {
     this.storage = useSync ? chrome.storage.sync : chrome.storage.local
     this.KEY_KEYS_INDICATOR = 'local:keys'
     this.KEY_VALUE_PREFIX = 'local:key:'
-    this.config = new LocalOSSConfig(useSync)
+    this.config = createLocalConfig(useSync)
   }
 
   usedBytes(): Promise<number> {
@@ -40,14 +43,8 @@ export class LocalOSS implements OSS {
 
   private async readKeys(): Promise<string[]> {
     const o = await this.storage.get(this.KEY_KEYS_INDICATOR)
-    const keysStr = o[this.KEY_KEYS_INDICATOR] as (string | undefined)
-    let keys: string[]
-    if (keysStr) {
-      keys = JSON.parse(keysStr)
-    } else {
-      keys = []
-    }
-    return keys
+    const keys = o[this.KEY_KEYS_INDICATOR] as (string[] | undefined)
+    return keys ?? []
   }
 
   listKeys(): Promise<string[]> {
@@ -77,6 +74,7 @@ export class LocalOSS implements OSS {
   }
   async query(name: string): Promise<string> {
     const o = await this.storage.get(this.KEY_VALUE_PREFIX + name)
+    console.log(o)
     return o[this.KEY_VALUE_PREFIX + name]
   }
   async insert(name: string, data: string): Promise<void> {
