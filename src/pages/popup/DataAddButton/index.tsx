@@ -24,7 +24,6 @@ const DataAddButton: React.FC = () => {
       return
     }
     const data = form.getSelected()
-    console.log('1111111111111111', data)
     dispatch(
       savePageData({
         config: data.oss,

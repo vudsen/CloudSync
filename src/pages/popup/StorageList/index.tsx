@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import { useContext } from 'react'
-import PopupContext from '../context'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   Table,
   TableHeader,
@@ -8,61 +6,59 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Button,
+  Link
 } from '@nextui-org/react'
-import type { Selection } from '@react-types/shared'
-
-const columns = [
-  {
-    key: 'name',
-    label: 'NAME',
-  },
-  {
-    key: 'action',
-    label: 'VIEW',
-  },
-]
+import { useSelector } from 'react-redux'
+import type { RootState } from '@/store'
+import type { HostData } from '@/store/oss/ossSlice.ts'
+import type { ApplyStorageModalRef } from './ApplyStorageModal.tsx'
+import ApplyStorageModal from './ApplyStorageModal.tsx'
 
 const StorageList: React.FC = () => {
-  const [selectedKeys, setSelectedKeys] = React.useState(new Set<string | number>())
-  const ctx = useContext(PopupContext)
-  const [storages, setStorages] = useState<string[]>([])
-  
+  const [host, setHost] = useState<string>()
+  const applyRef = useRef<ApplyStorageModalRef>(null)
+
+  const items = useSelector<RootState, HostData[]>(state => {
+    if (!host) {
+      return []
+    }
+    return state.oss.index[host] ?? []
+  })
   useEffect(() => {
     (async () => {
-      setStorages(await ctx.oss.listKeys())
+      const tabs = await chrome.tabs.query({ currentWindow: true, active: true })
+      const url = new URL(tabs[0].url!)
+      setHost(url.host)
     })()
-  }, [ctx.oss])
-
-  const onSelectedKeyChange = (selection: Selection) => {
-    if (selection === 'all') {
-      // TODO
-    } else {
-      setSelectedKeys(selection)
-    }
-  }
+  }, [])
+  
 
   return (
-    <Table
-      selectedKeys={selectedKeys}
-      selectionMode="multiple"
-      onSelectionChange={onSelectedKeyChange}>
-      <TableHeader columns={columns}>
-        {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
-      </TableHeader>
-      <TableBody items={storages}>
-        {(item) => (
-          <TableRow key={item}>
-            <TableCell>{item}</TableCell>
-            <TableCell>
-              <Button variant="light" color="primary">
-                View
-              </Button>
-            </TableCell>
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <>
+      <Table>
+        <TableHeader>
+          <TableColumn key="Name">Name</TableColumn>
+          <TableColumn key="action">Actions</TableColumn>
+        </TableHeader>
+        <TableBody>
+          {
+            items.map(v => (
+              <TableRow key={v.id}>
+                <TableCell>{v.name}</TableCell>
+                <TableCell>
+                  <Link color="primary"
+                    underline="hover" 
+                    className="cursor-pointer" 
+                    onPress={() => applyRef.current?.apply(v)}>Apply</Link>
+                  <Link color="danger" underline="hover" className="cursor-pointer mx-2">Delete</Link>
+                </TableCell>
+              </TableRow>
+            ))
+          }
+        </TableBody>
+      </Table>
+      <ApplyStorageModal ref={applyRef}/>
+    </>
   )  
 }
 

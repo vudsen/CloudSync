@@ -1,5 +1,8 @@
+import type { StorageItem } from '@/store/oss/ossSlice.ts'
+
 interface RequestMessage {
-  ReadLocalStorage: void
+  ReadLocalStorage: void,
+  SynchronousStorage: StorageItem[],
 }
 
 interface ResponseMessage {
