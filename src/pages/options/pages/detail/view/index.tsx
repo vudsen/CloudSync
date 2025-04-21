@@ -6,16 +6,17 @@ import type { BaseOSSConfig } from '@/oss/type.ts'
 import { useEffect, useState } from 'react'
 import createOssTemplate from '@/oss/template.ts'
 import {
+  Button,
   Card,
   CardBody,
   CardHeader,
-  Chip,
+  Chip, Code, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader,
   Table,
   TableBody,
   TableCell,
   TableColumn,
   TableHeader,
-  TableRow
+  TableRow, Tooltip, useDisclosure
 } from '@nextui-org/react'
 
 type State = {
@@ -28,6 +29,14 @@ const ViewRecordRoute: React.FC = () => {
   const host = searchParams.get('host')
   const id = searchParams.get('id')
   const [items, setItems] = useState<StorageItem[]>([])
+  const [selectedData, setSelectedData] = useState<string>()
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+
+
+  const viewData = (data: string) => {
+    setSelectedData(data)
+    onOpen()
+  }
 
   const state = useSelector<RootState, State | undefined>(state => {
     if (!host || !id) {
@@ -69,32 +78,61 @@ const ViewRecordRoute: React.FC = () => {
   }
   
   return (
-    <Card>
-      <CardHeader>
-        <div>
-          The Stored Items Of &nbsp;
-          <Chip color="primary">{ state.hostData.name }</Chip>
-        </div>
-      </CardHeader>
-      <CardBody>
-        <Table>
-          <TableHeader>
-            <TableColumn key="name">Name</TableColumn>
-            <TableColumn key="data">Data</TableColumn>
-          </TableHeader>
-          <TableBody>
-            {
-              items.map(v => (
-                <TableRow key={v.name}>
-                  <TableCell>{v.name}</TableCell>
-                  <TableCell>{v.data}</TableCell>
-                </TableRow>
-              ))
-            }
-          </TableBody>
-        </Table>
-      </CardBody>
-    </Card>
+    <>
+      <Card className="w-full">
+        <CardHeader>
+          <div>
+            The Stored Items Of &nbsp;
+            <Chip color="primary">{ state.hostData.name }</Chip>
+          </div>
+        </CardHeader>
+        <CardBody>
+          <Table>
+            <TableHeader>
+              <TableColumn key="name">Name</TableColumn>
+              <TableColumn key="data">Data</TableColumn>
+            </TableHeader>
+            <TableBody>
+              {
+                items.map(v => (
+                  <TableRow key={v.name}>
+                    <TableCell>{v.name}</TableCell>
+                    <TableCell>
+                      { v.data.length > 50 ?
+                        (
+                          <Tooltip content={`Click to show all (${v.data.length} chars).`}>
+                            <Link className="truncate cursor-pointer" onPress={() => viewData(v.data)}>
+                              {v.data.substring(0, 50)}...
+                            </Link>
+                          </Tooltip>
+                        ) : v.data
+                      }
+                    </TableCell>
+                  </TableRow>
+                ))
+              }
+            </TableBody>
+          </Table>
+        </CardBody>
+      </Card>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="full" scrollBehavior="inside">
+        <ModalContent>
+          {onClose => (
+            <>
+              <ModalHeader>Storage Data</ModalHeader>
+              <ModalBody>
+                <Code className="whitespace-normal break-words">{selectedData}</Code>
+              </ModalBody>
+              <ModalFooter>
+                <Button variant="light" onPress={onClose}>
+                  Close
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </>
   )
 }
 

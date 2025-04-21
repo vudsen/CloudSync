@@ -24,7 +24,7 @@ const Layout: React.FC = () => {
   const matches = useMatches()
 
   return (
-    <div className="w-full">
+    <div className="w-full overflow-x-hidden">
       <div className="flex">
         <div className="w-[10rem]">
           <div className="flex flex-col border border-gray-200 h-full fixed left-0 top-0 w-[10rem]">
