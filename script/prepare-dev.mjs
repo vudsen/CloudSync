@@ -4,7 +4,7 @@ child_process.execSync('vite build --config script/vite/pages-prepare.config.ts'
   stdio: 'inherit',
 })
 
-child_process.execSync('vite build --config script/vite/content-script.config.ts', {
+child_process.execSync('vite build --config script/vite/scripts.config.ts', {
   stdio: 'inherit',
 })
 

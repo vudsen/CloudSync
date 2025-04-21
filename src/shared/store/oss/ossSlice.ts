@@ -115,6 +115,17 @@ export const ossSlice = createSlice({
       }
       state.index[payload.host].push(entity)
     })
+    builder.addCase(deletePageData.fulfilled, (state, { payload }) => {
+      const idx = state.index[payload.host]
+      if (!idx) {
+        return
+      }
+      const entity = idx[payload.offset]
+      if (!entity) {
+        return
+      }
+      idx.splice(payload.offset, 1)
+    })
     builder.addMatcher(isRejected, (_, action) => {
       console.error(action.error)
     })

@@ -48,7 +48,9 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
       if (!context.tab.id) {
         return
       }
-      const storage = await sendMsgToTabAndWaitForResponse(context.tab.id, 'ReadLocalStorageResponse', 'ReadLocalStorage')
+      const storage = await sendMsgToTabAndWaitForResponse('ReadLocalStorageResponse', 'ReadLocalStorage', {
+        tabId: context.tab.id,
+      })
       const result: StorageItem[] = []
       for (const key of Object.keys(storage)) {
         result.push({
@@ -57,7 +59,9 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
         })
       }
       setStorage(result)
-    })()
+    })().catch(e => {
+      console.error(e)
+    })
   }, [context.tab.id])
 
   const onSelectedKeyChange = (selection: Selection) => {

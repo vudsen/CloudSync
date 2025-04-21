@@ -69,6 +69,9 @@ importers:
       chrome-types:
         specifier: ^0.1.329
         version: 0.1.329
+      cross-env:
+        specifier: ^7.0.3
+        version: 7.0.3
       eslint:
         specifier: ^9.17.0
         version: 9.17.0(jiti@1.21.7)
@@ -1938,6 +1941,11 @@ packages:
   cookie@1.0.2:
     resolution: {integrity: sha512-9Kr/j4O16ISv8zBBhJoi4bXOYNTkFLOqSL3UDB0njXxCXNezjeyVrJyGOWtgfs/q2km1gwBcfH8q1yEGoMYunA==}
     engines: {node: '>=18'}
+
+  cross-env@7.0.3:
+    resolution: {integrity: sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==}
+    engines: {node: '>=10.14', npm: '>=6', yarn: '>=1'}
+    hasBin: true
 
   cross-iframe-rpc@1.1.3:
     resolution: {integrity: sha512-KmY8jULgI+A5/VVPWrFFa15+U/H/5xl8allbZCUokd2N299nDn5JU1LEWDWWvRT3k7jXtO6wWTIV0c8syJfAgA==}
@@ -5573,6 +5581,10 @@ snapshots:
   concat-map@0.0.1: {}
 
   cookie@1.0.2: {}
+
+  cross-env@7.0.3:
+    dependencies:
+      cross-spawn: 7.0.6
 
   cross-iframe-rpc@1.1.3:
     dependencies:

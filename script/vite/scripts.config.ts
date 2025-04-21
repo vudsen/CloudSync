@@ -6,13 +6,16 @@ import * as path from 'node:path'
 export default defineConfig({
   plugins: [react()],
   build: {
-    outDir: 'extension/content-scripts',
+    sourcemap: true,
+    outDir: 'extension/scripts',
     lib: {
       name: 'cs',
-      entry: './src/scripts/content-script.ts',
+      entry: ['./src/scripts/background.ts'],
       formats: ['iife'],
-      fileName: 'index',
     },
+  },
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
   },
   resolve: {
     alias: {

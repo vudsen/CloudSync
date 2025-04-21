@@ -4,9 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "prepare:dev": "node script/prepare-dev.mjs",
-    "dev": "vite --config script/vite/pages.config.ts",
-    "build": "node script/build-all.mjs",
+    "prepare:dev": "cross-env NODE_ENV=development node script/prepare-dev.mjs",
+    "dev": "cross-env NODE_ENV=development vite --config script/vite/pages.config.ts",
+    "dev:scripts": "cross-env NODE_ENV=development vite build --config script/vite/scripts.config.ts --watch",
+    "build": "cross-env NODE_ENV=production node script/build-all.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -33,6 +34,7 @@
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.20",
     "chrome-types": "^0.1.329",
+    "cross-env": "^7.0.3",
     "eslint": "^9.17.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",

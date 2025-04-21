@@ -55,7 +55,10 @@ const ApplyStorageModal: React.FC<ApplyStorageModalProps> = (props) => {
       }
       const items = await oss.queryStorages(data.remoteKey)
       console.log('iii')
-      await chrome.tabs.sendMessage(tab.id, createMessage('SynchronousStorage', items))
+      await chrome.tabs.sendMessage(tab.id, createMessage('SynchronousStorage', {
+        tabId: tab.id,
+        items
+      }))
     })().catch(e => {
       console.error(e)
       addToast({
