@@ -1,29 +1,23 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import {
   Button,
   Drawer,
   DrawerBody,
   DrawerContent,
-  DrawerFooter,
   DrawerHeader,
   useDisclosure,
 } from '@nextui-org/react'
-import type { LocalStoragePresentRef } from './LocalStoragePresent.tsx'
+import type { SelectedData } from './LocalStoragePresent.tsx'
 import LocalStoragePresent from './LocalStoragePresent.tsx'
 import { savePageData } from '@/store/oss/ossSlice.ts'
 import { useAppDispatch } from '@/store/hooks.ts'
 
 const DataAddButton: React.FC = () => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  const localStoragePresent = useRef<LocalStoragePresentRef>(null)
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
   const dispatch = useAppDispatch()
 
-  const onSaveClick = (close: () => void) => {
-    const form = localStoragePresent.current!
-    if (form.isFormInvalid()) {
-      return
-    }
-    const data = form.getSelected()
+  const onSubmit = (data: SelectedData) => {
+    console.log(data)
     dispatch(
       savePageData({
         config: data.oss,
@@ -34,30 +28,22 @@ const DataAddButton: React.FC = () => {
     ).catch(e => {
       console.log(e)
     })
-    close()
+    onClose()
   }
-
+  
 
   return (
     <div>
-      <Button onPress={onOpen}>Save Current Data</Button>
+      <Button onPress={onOpen} size="sm" color="primary">Save Current Page</Button>
       <Drawer size="full" isOpen={isOpen} onOpenChange={onOpenChange} placement="bottom">
         <DrawerContent>
           {
             (onClose) => (
               <div>
-                <DrawerHeader className="flex flex-col gap-1">Local Storage Data</DrawerHeader>
+                <DrawerHeader className="flex flex-col gap-1">Save Current Page</DrawerHeader>
                 <DrawerBody>
-                  <LocalStoragePresent ref={localStoragePresent}/>
+                  <LocalStoragePresent onSubmit={onSubmit} onCancel={onClose}/>
                 </DrawerBody>
-                <DrawerFooter>
-                  <Button color="danger" variant="light" onPress={onClose}>
-                    Close
-                  </Button>
-                  <Button color="primary" onPress={() => onSaveClick(onClose)}>
-                    Save
-                  </Button>
-                </DrawerFooter>
               </div>
             )
           }

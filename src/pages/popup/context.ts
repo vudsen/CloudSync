@@ -1,15 +1,15 @@
 import { createContext } from 'react'
-import type { OSS } from '../../shared/oss/type'
 
-type MyContext = {
-  oss: OSS
+
+interface PopupContextState {
+  tab: chrome.tabs.Tab
+  host: string
 }
 
-const PopupContext = createContext<MyContext>({
-  // assign later
-  oss: (null as never)
+const PopupContext = createContext<PopupContextState>({
+  // init later
+  tab: null as unknown as chrome.tabs.Tab,
+  host: ''
 })
-
-export const CONTAINER_HEIGHT = 500
 
 export default PopupContext

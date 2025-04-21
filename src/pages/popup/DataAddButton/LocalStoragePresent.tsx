@@ -1,32 +1,30 @@
-import { useRef } from 'react'
-import { useImperativeHandle } from 'react'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useRef, useEffect, useState } from 'react'
 import { sendMsgToTabAndWaitForResponse } from '@/util/extension.ts'
 import {
   Alert,
-  Button, Code, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem,
+  Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem,
   Table, TableBody, TableCell, TableColumn,
-  TableHeader, TableRow, Tooltip, useDisclosure,
+  TableHeader, TableRow, Textarea, Tooltip, useDisclosure,
 } from '@nextui-org/react'
 import type { Selection } from '@react-types/shared'
-import type { StorageItem } from '@/core/data.ts'
 import { useAppSelector } from '@/store/hooks.ts'
 import type { BaseOSSConfig } from '@/oss/type.ts'
+import type { StorageItem } from '@/store/oss/ossSlice.ts'
+import PopupContext from '../context.ts'
+import type { SubmitHandler } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
-type SelectedData = {
+export type SelectedData = {
   table: StorageItem[]
   url: string
   oss: BaseOSSConfig
   name: string
 }
 
-export type LocalStoragePresentRef = {
-  getSelected: () => SelectedData
-  isFormInvalid: () => boolean
-}
 
 interface LocalStoragePresentProps {
-  ref?: React.Ref<LocalStoragePresentRef>
+  onSubmit: (data: SelectedData) => void
+  onCancel: () => void
 }
 
 const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
@@ -34,51 +32,23 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const [ storage, setStorage ] = useState<StorageItem[]>([])
   const [ selectedItems, setSelectedItem ] = useState<StorageItem>({ name: '', data: '' })
-  const [ currentUrl, setCurrentUrl ] = useState<string>('')
-  const [ name, setName ] = useState<string>('')
-  const select = useRef<HTMLSelectElement>(null)
   const [ tableEmptyAlertVisible, setTableEmptyAlertVisible ] = useState(false)
   const configs = useAppSelector(state => state.oss.configs)
+  const context = useContext(PopupContext)
+  const host = context.host
 
-  useImperativeHandle(props.ref, () => ({
-    getSelected: () => {
-      const table: StorageItem[] = []
-      for (const selectedKey of selectedKeys) {
-        for (const storageItem of storage) {
-          if (storageItem.name === selectedKey) {
-            table.push(storageItem)
-          }
-        }
-      }
-      return {
-        table,
-        url: currentUrl,
-        oss: configs[select.current!.selectedIndex - 1],
-        name
-      }
-    },
-    isFormInvalid: () => {
-      const sel = select.current
-      if (!sel) {
-        return true
-      }
-      if (selectedKeys.size === 0) {
-        setTableEmptyAlertVisible(true)
-        return true
-      }
-      return !sel.checkValidity()
-    }
-  }))
+  const formRef = useRef<HTMLFormElement>(null)
+  const {
+    register,
+    handleSubmit,
+  } = useForm<SelectedData>()
 
   useEffect(() => {
     (async () => {
-      const tabs = await chrome.tabs.query({ currentWindow: true, active: true })
-      const tab = tabs[0]
-      if (!tab|| !tab.id) {
+      if (!context.tab.id) {
         return
       }
-      setCurrentUrl(tab.url ?? '<unknown>')
-      const storage = await sendMsgToTabAndWaitForResponse(tab.id, 'ReadLocalStorageResponse', 'ReadLocalStorage')
+      const storage = await sendMsgToTabAndWaitForResponse(context.tab.id, 'ReadLocalStorageResponse', 'ReadLocalStorage')
       const result: StorageItem[] = []
       for (const key of Object.keys(storage)) {
         result.push({
@@ -88,7 +58,7 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
       }
       setStorage(result)
     })()
-  }, [])
+  }, [context.tab.id])
 
   const onSelectedKeyChange = (selection: Selection) => {
     setTableEmptyAlertVisible(false)
@@ -104,6 +74,14 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
     onOpen()
   }
 
+  const onSubmit: SubmitHandler<SelectedData> = (data, event) => {
+    event?.preventDefault()
+    if (selectedKeys.size === 0) {
+      setTableEmptyAlertVisible(true)
+      return
+    }
+    onSubmit(data)
+  }
 
   return (
     <>
@@ -116,9 +94,7 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
                   <div className="text-ellipsis overflow-hidden max-w-64">{selectedItems.name}</div>
                 </ModalHeader>
                 <ModalBody>
-                  <Code>
-                    {selectedItems.data}
-                  </Code>
+                  <Textarea value={selectedItems.data}/>
                 </ModalBody>
                 <ModalFooter>
                   <Button color="primary" onPress={onClose}>
@@ -130,8 +106,9 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
           }
         </ModalContent>
       </Modal>
-      <div>
-        <Select label="Select a OSS Provider" size="sm" color="primary" isRequired ref={select}>
+      <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
+        <Input label="Name" placeholder="Name" isRequired type="text" {...register('name')}/>
+        <Select label="OSS Provider" size="sm" color="primary" className="my-4" isRequired {...register('oss')}>
           {
             configs.map(oss => (
               <SelectItem key={oss.name} classNames={{
@@ -142,8 +119,7 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
             ))
           }
         </Select>
-        <Input placeholder="Name" value={name} onValueChange={setName} />
-        <div className="my-4">
+        <div className="my-4 w-full">
           {
             tableEmptyAlertVisible ? <Alert hideIcon color="danger" description="At least select one table item"/> : null
           }
@@ -162,7 +138,7 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
             <TableColumn>Action</TableColumn>
           </TableHeader>
           <TableBody items={storage} emptyContent={
-            <p className="text-ellipsis overflow-hidden">No data on {currentUrl}</p>
+            <p className="text-ellipsis overflow-hidden">No data on {host}</p>
           }>
             {(item) => (
               <TableRow key={item.name}>
@@ -180,7 +156,11 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
             )}
           </TableBody>
         </Table>
-      </div>
+        <div className="flex flex-row-reverse my-4">
+          <Button type="submit" color="primary">Save</Button>
+          <Button variant="light" color="danger" onPress={props.onCancel} className="mx-2">Close</Button>
+        </div>
+      </form>
     </>
   )
 }

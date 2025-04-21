@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useRef } from 'react'
 import {
   Table,
   TableHeader,
@@ -13,9 +13,11 @@ import type { RootState } from '@/store'
 import type { HostData } from '@/store/oss/ossSlice.ts'
 import type { ApplyStorageModalRef } from './ApplyStorageModal.tsx'
 import ApplyStorageModal from './ApplyStorageModal.tsx'
+import PopupContext from '../context.ts'
 
 const StorageList: React.FC = () => {
-  const [host, setHost] = useState<string>()
+  const context = useContext(PopupContext)
+  const host = new URL(context.tab.url ?? '').host
   const applyRef = useRef<ApplyStorageModalRef>(null)
 
   const items = useSelector<RootState, HostData[]>(state => {
@@ -24,14 +26,6 @@ const StorageList: React.FC = () => {
     }
     return state.oss.index[host] ?? []
   })
-  useEffect(() => {
-    (async () => {
-      const tabs = await chrome.tabs.query({ currentWindow: true, active: true })
-      const url = new URL(tabs[0].url!)
-      setHost(url.host)
-    })()
-  }, [])
-  
 
   return (
     <>
@@ -40,7 +34,7 @@ const StorageList: React.FC = () => {
           <TableColumn key="Name">Name</TableColumn>
           <TableColumn key="action">Actions</TableColumn>
         </TableHeader>
-        <TableBody>
+        <TableBody emptyContent={'No data'}>
           {
             items.map(v => (
               <TableRow key={v.id}>
