@@ -1,5 +1,5 @@
-import { useDisclosure } from '@nextui-org/react'
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/react'
+import { useDisclosure } from '@heroui/react'
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@heroui/react'
 import React, { useImperativeHandle, useState } from 'react'
 
 type DialogConfig = {

@@ -6,7 +6,7 @@ import {
   DrawerContent,
   DrawerHeader,
   useDisclosure,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import type { SelectedData } from './LocalStoragePresent.tsx'
 import LocalStoragePresent from './LocalStoragePresent.tsx'
 import { savePageData } from '@/store/oss/ossSlice.ts'

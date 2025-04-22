@@ -1,5 +1,5 @@
 import { supportedOSS } from '@/oss/factory.ts'
-import { Select, SelectItem, Tooltip } from '@nextui-org/react'
+import { Select, SelectItem, Tooltip } from '@heroui/react'
 import type { ChangeEventHandler } from 'react'
 import React from 'react'
 import type { OssType } from '@/oss/type.ts'

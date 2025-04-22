@@ -5,7 +5,7 @@ import {
   Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem,
   Table, TableBody, TableCell, TableColumn,
   TableHeader, TableRow, Textarea, Tooltip, useDisclosure,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import type { Selection } from '@react-types/shared'
 import { useAppSelector } from '@/store/hooks.ts'
 import type { BaseOSSConfig } from '@/oss/type.ts'

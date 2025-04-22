@@ -7,7 +7,7 @@ import {
   TableRow,
   TableCell,
   Link
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { useSelector } from 'react-redux'
 import type { RootState } from '@/store'
 import type { HostData } from '@/store/oss/ossSlice.ts'

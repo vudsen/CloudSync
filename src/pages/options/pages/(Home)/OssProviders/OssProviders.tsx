@@ -9,7 +9,7 @@ import {
   TableColumn,
   TableHeader,
   TableRow, useDisclosure
-} from '@nextui-org/react'
+} from '@heroui/react'
 import React, { useRef } from 'react'
 import OssProviderForm from '../../../components/OssProviderForm'
 import type { ConfigFormComponentRef } from '../../../oss-ui/types.ts'

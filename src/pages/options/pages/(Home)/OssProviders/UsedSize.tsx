@@ -2,7 +2,7 @@ import type React from 'react'
 import { useEffect, useState } from 'react'
 import type { BaseOSSConfig } from '@/oss/type.ts'
 import { createOSSInstance } from '@/oss/factory.ts'
-import { Skeleton } from '@nextui-org/react'
+import { Skeleton } from '@heroui/react'
 
 interface UsedSizeProps {
   config: BaseOSSConfig

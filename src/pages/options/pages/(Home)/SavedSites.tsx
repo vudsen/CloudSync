@@ -9,7 +9,7 @@ import {
   TableColumn,
   TableHeader,
   TableRow
-} from '@nextui-org/react'
+} from '@heroui/react'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import type { RootState } from '@/store'

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import StorageList from './StorageList'
 import DataAddButton from './DataAddButton'
 import PopupContext from './context.ts'
-import { Link } from '@nextui-org/react'
+import { Link } from '@heroui/react'
 
 const App = () => {
   const [tab, setTab] = useState<chrome.tabs.Tab>()

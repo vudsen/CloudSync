@@ -1,6 +1,6 @@
 import React from 'react'
 import { Outlet, useLocation, useMatches, useNavigate } from 'react-router'
-import { Button, Divider } from '@nextui-org/react'
+import { Button, Divider } from '@heroui/react'
 import type { RouteMeta } from '../options-type.ts'
 import Back from '@/icons/Back.tsx'
 

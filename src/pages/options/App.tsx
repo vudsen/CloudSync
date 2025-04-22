@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tab, Tabs } from '@nextui-org/react'
+import { Tab, Tabs } from '@heroui/react'
 
 const App: React.FC = () => {
   return (

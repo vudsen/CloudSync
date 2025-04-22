@@ -17,7 +17,7 @@ import {
   TableColumn,
   TableHeader,
   TableRow, Tooltip, useDisclosure
-} from '@nextui-org/react'
+} from '@heroui/react'
 
 type State = {
   hostData: HostData

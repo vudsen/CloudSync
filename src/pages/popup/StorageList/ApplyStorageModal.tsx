@@ -1,5 +1,5 @@
 import React, { useImperativeHandle, useState } from 'react'
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react'
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@heroui/react'
 import type { HostData } from '@/store/oss/ossSlice.ts'
 import createOssTemplate from '@/oss/template.ts'
 import store from '@/store'

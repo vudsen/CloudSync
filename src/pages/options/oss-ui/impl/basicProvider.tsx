@@ -3,7 +3,7 @@ import { useImperativeHandle, useState } from 'react'
 import { registerUiProvider } from '../factory.ts'
 import { OssType } from '@/oss/type.ts'
 import { createLocalConfig } from '@/oss/remote/local.ts'
-import { Checkbox } from '@nextui-org/react'
+import { Checkbox } from '@heroui/react'
 
 const localOssProvider: OssUiProvider = {
   isSupported() {
