@@ -59,13 +59,13 @@ export const sendResponseMessage = <K extends keyof ResponseMessage>(k: K, data:
   return chrome.runtime.sendMessage(JSON.stringify(msg))
 }
 
-export const createMessage =
+export const sendMessageToBackground =
   <T extends keyof RequestMessage>(...args: SendMessageFuncArgs<T>) => {
     const data: MessageBase = {
       type: args[0],
       data: args[1],
     }
-    return JSON.stringify(data)
+    return chrome.runtime.sendMessage(data)
   }
 
 export type MessageListener = Parameters<typeof chrome.runtime.onMessage.addListener>[0]

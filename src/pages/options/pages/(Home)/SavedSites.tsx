@@ -45,13 +45,19 @@ const SavedSites: React.FC = () => {
           <TableBody emptyContent={'Nothing saved.'}>
             {
               Object.entries(hosts).map(([host, idx]) => (
-                <TableRow key={host}>
-                  <TableCell>{host}</TableCell>
-                  <TableCell>{idx.length}</TableCell>
-                  <TableCell>
-                    <Button color="primary" variant="light" onPress={() => toHostDetail(host)}>Detail</Button>
-                  </TableCell>
-                </TableRow>
+                <React.Fragment key={host}>
+                  {
+                    idx && idx.length > 0 ? (
+                      <TableRow>
+                        <TableCell>{host}</TableCell>
+                        <TableCell>{idx.length}</TableCell>
+                        <TableCell>
+                          <Button color="primary" variant="light" onPress={() => toHostDetail(host)}>Detail</Button>
+                        </TableCell>
+                      </TableRow>
+                    ) : null
+                  }
+                </React.Fragment>
               ))
             }
           </TableBody>

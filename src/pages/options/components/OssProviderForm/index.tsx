@@ -5,7 +5,7 @@ import OssSelector from '@/component/OssSelector.tsx'
 import type { ConfigFormComponentRef, OssUiProvider } from '../../oss-ui/types.ts'
 
 export interface OssProviderFormProps {
-  updateEntity?: BaseOSSConfig
+  oldEntity?: BaseOSSConfig
   ref?: Ref<ConfigFormComponentRef>
 }
 
@@ -31,12 +31,12 @@ const RenderUiProvider: React.FC<{provider: OssUiProvider, ref?: Ref<ConfigFormC
  * Oss 配置表单
  */
 const OssProviderForm: React.FC<OssProviderFormProps> = (props) => {
-  const [ossType, setOssType] = useState<OssType>()
+  const [ossType, setOssType] = useState<OssType | undefined>(props.oldEntity?.type)
   const uiProvider = getUiProvider(ossType)
 
   return (
     <div>
-      <OssSelector onChange={setOssType}/>
+      <OssSelector onChange={setOssType} initialValue={ossType}/>
       {
         uiProvider ? <RenderUiProvider provider={uiProvider} ref={props.ref}/> : null
       }

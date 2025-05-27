@@ -2,7 +2,8 @@ import type { OssUiProvider } from '../types.ts'
 import { useImperativeHandle, useState } from 'react'
 import { registerUiProvider } from '../factory.ts'
 import { OssType } from '@/oss/type.ts'
-import { createLocalConfig } from '@/oss/remote/local.ts'
+import type { LocalOSSConfig } from '@/oss/remote/local.tsx'
+import { createLocalConfig } from '@/oss/remote/local.tsx'
 import { Checkbox } from '@heroui/react'
 
 const localOssProvider: OssUiProvider = {
@@ -10,17 +11,20 @@ const localOssProvider: OssUiProvider = {
     return Promise.resolve(null)
   },
   ConfigFormComponent: (props) => {
-    const [useSync, setUseSync] = useState(false)
+    const [configuration, setConfiguration] = useState<LocalOSSConfig>({
+      ...createLocalConfig(false),
+      ...props.oldEntity
+    })
 
     useImperativeHandle(props.ref, () => ({
       apply: () => {
-        return createLocalConfig(useSync)
+        return configuration
       }
     }))
 
     return (
       <div>
-        <Checkbox isSelected={useSync} onValueChange={setUseSync}>
+        <Checkbox isSelected={configuration.useSync} onValueChange={(value) => setConfiguration({ ...configuration, useSync: value })}>
           Sync Data To Cloud
         </Checkbox>
       </div>
@@ -28,4 +32,4 @@ const localOssProvider: OssUiProvider = {
   }
 }
 
-registerUiProvider(OssType.LOCAL, localOssProvider)
+registerUiProvider(OssType.ACCOUNT, localOssProvider)

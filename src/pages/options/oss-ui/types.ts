@@ -3,7 +3,7 @@ import type { Ref } from 'react'
 import type React from 'react'
 
 export interface OssConfigProps {
-  updateEntity?: BaseOSSConfig
+  oldEntity?: BaseOSSConfig
   onFinish?: (config: BaseOSSConfig) => void
   ref?: Ref<ConfigFormComponentRef>
 }

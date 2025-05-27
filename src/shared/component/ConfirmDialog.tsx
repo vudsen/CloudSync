@@ -2,9 +2,9 @@ import { useDisclosure } from '@heroui/react'
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@heroui/react'
 import React, { useImperativeHandle, useState } from 'react'
 
-type DialogConfig = {
+export type DialogConfig = {
   title: string
-  message: string
+  message?: string
   confirmBtnText?: string
   cancelBtnText?: string
   onConfirm?: () => void
@@ -26,13 +26,12 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
     title: '',
     cancelBtnText: 'Cancel',
     confirmBtnText: 'Confirm',
-    message: ''
   })
   const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure()
 
   const onConfirm = () => {
-    onClose()
     config.onConfirm?.()
+    onClose()
   }
 
   useImperativeHandle(props.ref, () => ({

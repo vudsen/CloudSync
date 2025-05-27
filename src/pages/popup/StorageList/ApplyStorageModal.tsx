@@ -4,7 +4,7 @@ import type { HostData } from '@/store/oss/ossSlice.ts'
 import createOssTemplate from '@/oss/template.ts'
 import store from '@/store'
 import { addToast } from '@heroui/toast'
-import { createMessage } from '@/util/extension.ts'
+import { sendMessageToBackground } from '@/util/extension.ts'
 
 export interface ApplyStorageModalRef {
   apply: (data: HostData) => void
@@ -55,10 +55,10 @@ const ApplyStorageModal: React.FC<ApplyStorageModalProps> = (props) => {
       }
       const items = await oss.queryStorages(data.remoteKey)
       console.log('iii')
-      await chrome.tabs.sendMessage(tab.id, createMessage('SynchronousStorage', {
+      await sendMessageToBackground('SynchronousStorage', {
         tabId: tab.id,
         items
-      }))
+      })
     })().catch(e => {
       console.error(e)
       addToast({

@@ -19,6 +19,7 @@ import { useAppDispatch } from '@/store/hooks.ts'
 import type { ConfirmDialogRef } from '@/component/ConfirmDialog.tsx'
 import ConfirmDialog from '@/component/ConfirmDialog.tsx'
 import { addToast } from '@heroui/toast'
+import {isRejected} from "@reduxjs/toolkit";
 
 const SiteDetail: React.FC = () => {
   const [searchParams] = useSearchParams()
@@ -33,7 +34,7 @@ const SiteDetail: React.FC = () => {
   if (!index || !host) {
     return (
       <div>
-        <span>No host provided.</span>
+        <span>No data available.</span>
       </div>
     )
   }
@@ -48,7 +49,15 @@ const SiteDetail: React.FC = () => {
       message: 'Are you sure you want to delete this record?',
       color: 'danger',
       onConfirm: () => {
-        dispatch(deletePageData({ host: host, id })).then(() => {
+        dispatch(deletePageData({ host: host, id })).then((r) => {
+          if (isRejected(r)) {
+            addToast({
+              title: 'Delete Failed',
+              description: r.error.message,
+              color: 'danger',
+            })
+            return
+          }
           addToast({
             title: 'Delete Success',
             description: 'Record deleted successfully.',

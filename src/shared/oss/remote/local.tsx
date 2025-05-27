@@ -1,5 +1,9 @@
-import type { BaseOSSConfig, OSS } from '../type.ts'
+import type { BaseOSSConfig, OSS, OSSUIProps } from '../type.ts'
 import { OssType } from '../type.ts'
+import { useImperativeHandle } from 'react'
+import type { SubmitHandler } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
+import { Input, Switch } from '@heroui/react'
 
 const CONSTANT_ID = '_$local' 
 
@@ -12,9 +16,54 @@ export function createLocalConfig(useSync: boolean): LocalOSSConfig {
     useSync,
     id: CONSTANT_ID,
     name: 'Local',
-    type: OssType.LOCAL
+    type: OssType.ACCOUNT
   }
 }
+
+type Inputs = {
+  name: string
+  useSync: boolean
+}
+
+export const LocalOSSUI: React.FC<OSSUIProps> = props => {
+  const conf = props.oldConfig as LocalOSSConfig | undefined
+  const {
+    register,
+    handleSubmit,
+    getValues
+  } = useForm<Inputs>({
+    values: conf ? {
+      name: conf.name,
+      useSync: conf.useSync,
+    } : undefined
+  })
+
+  useImperativeHandle(props.ref, () => ({
+    apply(): LocalOSSConfig | undefined {
+      const values = getValues()
+      return {
+        useSync: values.useSync,
+        name: values.name,
+        type: OssType.ACCOUNT,
+        id: conf ? conf.id : Date.now().toString(10),
+      }
+    }
+  }))
+  
+  const onSubmit: SubmitHandler<Inputs> = (data, evt) => {
+    console.log(data)
+    getValues()
+    evt?.preventDefault()
+  }
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Input label="Name" isRequired {...register('name')}/>
+      <Switch {...register('useSync')}>Sync to cloud</Switch>
+    </form>
+  )
+}
+
+
 
 export class LocalOSS implements OSS {
   

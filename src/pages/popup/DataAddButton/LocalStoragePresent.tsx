@@ -2,28 +2,32 @@ import React, { useContext, useRef, useEffect, useState } from 'react'
 import { sendMsgToTabAndWaitForResponse } from '@/util/extension.ts'
 import {
   Alert,
-  Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem,
+  Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, Spinner,
   Table, TableBody, TableCell, TableColumn,
   TableHeader, TableRow, Textarea, Tooltip, useDisclosure,
 } from '@heroui/react'
 import type { Selection } from '@react-types/shared'
 import { useAppSelector } from '@/store/hooks.ts'
-import type { BaseOSSConfig } from '@/oss/type.ts'
 import type { StorageItem } from '@/store/oss/ossSlice.ts'
 import PopupContext from '../context.ts'
 import type { SubmitHandler } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
+import { addToast } from '@heroui/toast'
+import type { BaseOSSConfig } from '@/oss/type.ts'
 
-export type SelectedData = {
+type Inputs = {
+  oss: string
+  name: string
+}
+
+export type SubmitData = {
   table: StorageItem[]
-  url: string
   oss: BaseOSSConfig
   name: string
 }
 
-
 interface LocalStoragePresentProps {
-  onSubmit: (data: SelectedData) => void
+  onSubmit: (data: SubmitData) => void
   onCancel: () => void
 }
 
@@ -36,15 +40,17 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
   const configs = useAppSelector(state => state.oss.configs)
   const context = useContext(PopupContext)
   const host = context.host
+  const [loading, setLoading] = useState(false)
 
   const formRef = useRef<HTMLFormElement>(null)
   const {
     register,
     handleSubmit,
-  } = useForm<SelectedData>()
+  } = useForm<Inputs>()
 
   useEffect(() => {
-    (async () => {
+    setLoading(true)
+    ;(async () => {
       if (!context.tab.id) {
         return
       }
@@ -61,6 +67,13 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
       setStorage(result)
     })().catch(e => {
       console.error(e)
+      addToast({
+        title: 'Error',
+        description: 'Failed to load local storage data',
+        color: 'danger',
+      })
+    }).finally(() => {
+      setLoading(false)
     })
   }, [context.tab.id])
 
@@ -78,13 +91,18 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
     onOpen()
   }
 
-  const onSubmit: SubmitHandler<SelectedData> = (data, event) => {
+  const onSubmit: SubmitHandler<Inputs> = (data, event) => {
     event?.preventDefault()
     if (selectedKeys.size === 0) {
       setTableEmptyAlertVisible(true)
       return
     }
-    onSubmit(data)
+
+    props.onSubmit({
+      name: data.name,
+      table: storage.filter(v => selectedKeys.has(v.name)),
+      oss: configs.find(v => v.name === data.oss)!,
+    })
   }
 
   return (
@@ -141,7 +159,7 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
             <TableColumn>Name</TableColumn>
             <TableColumn>Action</TableColumn>
           </TableHeader>
-          <TableBody items={storage} emptyContent={
+          <TableBody isLoading={loading} loadingContent={<Spinner label="Loading..." />} items={storage} emptyContent={
             <p className="text-ellipsis overflow-hidden">No data on {host}</p>
           }>
             {(item) => (

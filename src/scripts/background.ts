@@ -28,10 +28,11 @@ function localStorageSetItems(items: StorageItem[]) {
       localStorage.setItem(item.name, item.data)
     }
   })
-  const userResponse = confirm('Localstorage sync request was sent. Refresh the page to make it active now?')
-  if (userResponse) {
-    window.location.reload()
+  if (process.env.NODE_ENV === 'development') {
+    console.log(items)
   }
+  // idk why `window.location.reload()` can't make `beforeunload` work
+  alert('Localstorage sync request is done. Refresh the page to make it active.')
 }
 
 async function actualListener(obj: MessageBase) {

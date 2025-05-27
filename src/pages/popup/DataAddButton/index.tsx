@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useRef } from 'react'
 import {
   Button,
   Drawer,
@@ -7,26 +7,43 @@ import {
   DrawerHeader,
   useDisclosure,
 } from '@heroui/react'
-import type { SelectedData } from './LocalStoragePresent.tsx'
+import type { SubmitData } from './LocalStoragePresent.tsx'
 import LocalStoragePresent from './LocalStoragePresent.tsx'
 import { savePageData } from '@/store/oss/ossSlice.ts'
 import { useAppDispatch } from '@/store/hooks.ts'
+import PopupContext from '../context.ts'
+import type { ConfirmDialogRef } from '@/component/ConfirmDialog.tsx'
+import ConfirmDialog from '@/component/ConfirmDialog.tsx'
+import { isRejected } from '@reduxjs/toolkit'
 
 const DataAddButton: React.FC = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
   const dispatch = useAppDispatch()
+  const context = useContext(PopupContext)
+  const confirmDialog = useRef<ConfirmDialogRef>(null)
 
-  const onSubmit = (data: SelectedData) => {
-    console.log(data)
+  const onSubmit = (data: SubmitData) => {
     dispatch(
       savePageData({
         config: data.oss,
         name: data.name,
         items: data.table,
-        host: new URL(data.url).host
+        host: context.host
       })
-    ).catch(e => {
-      console.log(e)
+    ).then(payload => {
+      if (isRejected(payload)) {
+        confirmDialog.current!.showDialog({
+          title: 'Save Failed',
+          message: 'Failed to save data: ' + payload.error.message,
+          color: 'danger'
+        })
+        console.error(payload)
+      } else {
+        confirmDialog.current!.showDialog({
+          title: 'Save Success',
+          message: `Saved ${data.table.length} items to ${data.oss.name}`,
+        })
+      }
     })
     onClose()
   }
@@ -35,6 +52,7 @@ const DataAddButton: React.FC = () => {
   return (
     <div>
       <Button onPress={onOpen} size="sm" color="primary">Save Current Page</Button>
+      <ConfirmDialog ref={confirmDialog}/>
       <Drawer size="full" isOpen={isOpen} onOpenChange={onOpenChange} placement="bottom">
         <DrawerContent>
           {

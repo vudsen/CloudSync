@@ -8,6 +8,7 @@ import type { OssType } from '@/oss/type.ts'
 interface OssSelectorProps {
   ref?: React.Ref<HTMLSelectElement>
   onChange?: (ossType: OssType) => void
+  initialValue?: OssType
 }
 
 const OssSelector: React.FC<OssSelectorProps> = props => {
@@ -21,7 +22,8 @@ const OssSelector: React.FC<OssSelectorProps> = props => {
     <Select items={supportedOSS} 
       label="Select a OSS Provider" 
       size="sm" 
-      color="primary" 
+      color="primary"
+      defaultSelectedKeys={props.initialValue ? [props.initialValue] : []}
       isRequired ref={props.ref}
       renderValue={ossItems => (
         <>
