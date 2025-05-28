@@ -1,50 +1,20 @@
-# React + TypeScript + Vite
+# Storage Sync2 Cloud
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+将你的 localstorage 存储到云端！
 
-Currently, two official plugins are available:
+## 快速开始
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 保存
 
-## Expanding the ESLint configuration
+1. 进入任意页面，点击拓展打开弹出框。
+2. 点击下方 `Options` 按钮，进入设置页面。
+3. 在设置界面新建一个 `OSS Provider`
+4. 进入任意拥有 localstorage 的页面，点击拓展打开弹出框。
+5. 点击 `Save Current Page`，之后填写必要的表单，并选中需要保持的 localstorage 键。
+6. 点击 `Save` 按钮，等待保存完成。
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### 恢复
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+1. 进入任意页面，点击拓展打开弹出框。
+2. 找到要恢复的记录，点击 `Apply`。
+3. 刷新界面以进行恢复。
