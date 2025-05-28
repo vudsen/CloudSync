@@ -35,6 +35,10 @@ const App = () => {
     dataAddDialog.current!.openDialog(data)
   }
 
+  const gotoGitHub = () => {
+    chrome.tabs.create({ url: 'https://github.com/vudsen/storage-sync2-cloud' })
+  }
+
   const host = tab.url ? (new URL(tab.url)).host : '<Unknown>'
 
   return (
@@ -52,7 +56,7 @@ const App = () => {
         <div className="flex-1"/>
         <div className="flex justify-around">
           <Link size="sm" color="primary" isBlock showAnchorIcon className="cursor-pointer" onPress={toOptions}>Options</Link>
-          <Link size="sm" color="secondary" isBlock showAnchorIcon className="cursor-pointer">Github</Link>
+          <Link size="sm" color="secondary" isBlock showAnchorIcon className="cursor-pointer" onPress={gotoGitHub}>Github</Link>
         </div>
       </div>
     </PopupContext>
