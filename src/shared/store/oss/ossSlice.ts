@@ -69,6 +69,44 @@ export const savePageData = createAsyncThunk('oss/savePageData', async (data: Sa
   return r
 })
 
+type UpdateDataActionParam = {
+  hostDataId: string
+  config: BaseOSSConfig
+  host: string
+  entity: {
+    name?: string
+    items?: StorageItem[]
+    newOssConfig?: BaseOSSConfig
+  }
+}
+
+export const replacePageData = createAsyncThunk('oss/replacePageData', async (data: UpdateDataActionParam, { getState }) => {
+  const state = getState() as RootState
+  const indexes = state.oss.index[data.host]
+  if (!indexes) {
+    throw new Error(`Host not found for ${data.host}`)
+  }
+  const hostData = indexes.find(index => index.id === data.hostDataId)
+  if (!hostData) {
+    throw new Error(`Host data not found for ${data.hostDataId}`)
+  }
+  const oldOss = createOSSInstance(data.config)
+  if (data.entity.newOssConfig) {
+    await oldOss.delete(hostData.remoteKey)
+    const newOss = createOSSInstance(data.entity.newOssConfig)
+    await newOss.insert(hostData.remoteKey, JSON.stringify(data.entity.items))
+  } else {
+    await oldOss.insert(hostData.remoteKey, JSON.stringify(data.entity.items))
+  }
+  // update host data object
+  return {
+    id: hostData.id,
+    name: data.entity.name,
+    ossId: data.entity.newOssConfig?.id,
+    host: data.host
+  }
+})
+
 export const deletePageData = createAsyncThunk('oss/deletePageData', async (data: { host: string, id: string }, thunkAPI) => {
   const state = thunkAPI.getState() as RootState
   const indexes = state.oss.index[data.host]
@@ -181,6 +219,23 @@ export const ossSlice = createSlice({
       } else {
         idx.splice(payload.offset, 1)
       }
+    })
+    builder.addCase(replacePageData.fulfilled, (state, { payload }) => {
+      const idx = state.index[payload.host]
+      if (!idx) {
+        return
+      }
+      const entity = idx.find(v => v.id === payload.id)
+      if (!entity) {
+        return
+      }
+      if (payload.name) {
+        entity.name = payload.name
+      }
+      if (payload.ossId) {
+        entity.ossId = payload.ossId
+      }
+      entity.updateDate = Date.now()
     })
     builder.addMatcher(isRejected, (_, action) => {
       console.error(action.error.stack)

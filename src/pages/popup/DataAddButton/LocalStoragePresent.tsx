@@ -8,7 +8,7 @@ import {
 } from '@heroui/react'
 import type { Selection } from '@react-types/shared'
 import { useAppSelector } from '@/store/hooks.ts'
-import type { StorageItem } from '@/store/oss/ossSlice.ts'
+import type { HostData, StorageItem } from '@/store/oss/ossSlice.ts'
 import PopupContext from '../context.ts'
 import type { SubmitHandler } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
@@ -29,6 +29,7 @@ export type SubmitData = {
 interface LocalStoragePresentProps {
   onSubmit: (data: SubmitData) => void
   onCancel: () => void
+  oldState?: HostData
 }
 
 const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
@@ -98,10 +99,11 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
       return
     }
 
+    console.log(selectedKeys)
     props.onSubmit({
       name: data.name,
       table: storage.filter(v => selectedKeys.has(v.name)),
-      oss: configs.find(v => v.name === data.oss)!,
+      oss: configs.find(v => v.id === data.oss)!,
     })
   }
 
@@ -129,11 +131,11 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
         </ModalContent>
       </Modal>
       <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
-        <Input label="Name" placeholder="Name" isRequired type="text" {...register('name')}/>
-        <Select label="OSS Provider" size="sm" color="primary" className="my-4" isRequired {...register('oss')}>
+        <Input label="Name" placeholder="Name" isRequired type="text" {...register('name')} defaultValue={props.oldState?.name}/>
+        <Select label="OSS Provider" size="sm" color="primary" className="my-4" isRequired {...register('oss')} defaultSelectedKeys={props.oldState ? [props.oldState.ossId] : []}>
           {
             configs.map(oss => (
-              <SelectItem key={oss.name} classNames={{
+              <SelectItem key={oss.id} classNames={{
                 base: '[&>*:nth-child(1)]:overflow-hidden',
               }}>
                 {oss.name}
@@ -179,7 +181,9 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
           </TableBody>
         </Table>
         <div className="flex flex-row-reverse my-4">
-          <Button type="submit" color="primary">Save</Button>
+          <Button type="submit" color="primary">
+            {props.oldState ? 'Update' : 'Save'}
+          </Button>
           <Button variant="light" color="danger" onPress={props.onCancel} className="mx-2">Close</Button>
         </div>
       </form>

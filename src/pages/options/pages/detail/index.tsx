@@ -19,7 +19,7 @@ import { useAppDispatch } from '@/store/hooks.ts'
 import type { ConfirmDialogRef } from '@/component/ConfirmDialog.tsx'
 import ConfirmDialog from '@/component/ConfirmDialog.tsx'
 import { addToast } from '@heroui/toast'
-import {isRejected} from "@reduxjs/toolkit";
+import { isRejected } from '@reduxjs/toolkit'
 
 const SiteDetail: React.FC = () => {
   const [searchParams] = useSearchParams()

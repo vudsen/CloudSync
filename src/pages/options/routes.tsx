@@ -5,7 +5,6 @@ import type { RouteMeta } from './options-type.ts'
 
 const OverView = React.lazy(() => import('./pages/(Home)'))
 const Settings = React.lazy(() => import('./pages/settings'))
-const Storages = React.lazy(() => import('./pages/storages'))
 const SiteDetail = React.lazy(() => import('./pages/detail'))
 const ViewRecordRoute = React.lazy(() => import('./pages/detail/view'))
 
@@ -25,13 +24,6 @@ const RootRoutes = createBrowserRouter([
         element: <Settings/>,
         handle: {
           name: 'Settings',
-        } satisfies RouteMeta,
-      },
-      {
-        path: '/storages',
-        element: <Storages/>,
-        handle: {
-          name: 'Storages',
         } satisfies RouteMeta,
       },
       {

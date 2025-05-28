@@ -15,7 +15,11 @@ import type { ApplyStorageModalRef } from './ApplyStorageModal.tsx'
 import ApplyStorageModal from './ApplyStorageModal.tsx'
 import PopupContext from '../context.ts'
 
-const StorageList: React.FC = () => {
+interface StorageListProps {
+  onRequireReplace: (data: HostData) => void
+}
+
+const StorageList: React.FC<StorageListProps> = props => {
   const context = useContext(PopupContext)
   const host = new URL(context.tab.url ?? '').host
   const applyRef = useRef<ApplyStorageModalRef>(null)
@@ -44,7 +48,8 @@ const StorageList: React.FC = () => {
                     underline="hover" 
                     className="cursor-pointer" 
                     onPress={() => applyRef.current?.apply(v)}>Apply</Link>
-                  <Link color="danger" underline="hover" className="cursor-pointer mx-2">Delete</Link>
+                  <Link color="secondary" underline="hover" className="cursor-pointer mx-2" onPress={() => props.onRequireReplace(v)}>Update</Link>
+                  <Link color="danger" underline="hover" className="cursor-pointer">Delete</Link>
                 </TableCell>
               </TableRow>
             ))

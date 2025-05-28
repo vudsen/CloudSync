@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react'
+import React, { useContext, useImperativeHandle, useRef } from 'react'
 import {
   Button,
   Drawer,
@@ -9,6 +9,8 @@ import {
 } from '@heroui/react'
 import type { SubmitData } from './LocalStoragePresent.tsx'
 import LocalStoragePresent from './LocalStoragePresent.tsx'
+import type { HostData } from '@/store/oss/ossSlice.ts'
+import { replacePageData } from '@/store/oss/ossSlice.ts'
 import { savePageData } from '@/store/oss/ossSlice.ts'
 import { useAppDispatch } from '@/store/hooks.ts'
 import PopupContext from '../context.ts'
@@ -16,21 +18,55 @@ import type { ConfirmDialogRef } from '@/component/ConfirmDialog.tsx'
 import ConfirmDialog from '@/component/ConfirmDialog.tsx'
 import { isRejected } from '@reduxjs/toolkit'
 
-const DataAddButton: React.FC = () => {
+export interface DataAddButtonRef {
+  openDialog: (entity?: HostData) => void
+}
+
+interface DataAddButtonProps {
+  ref: React.RefObject<DataAddButtonRef | null>
+}
+
+const DataAddButton: React.FC<DataAddButtonProps> = props => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
   const dispatch = useAppDispatch()
   const context = useContext(PopupContext)
   const confirmDialog = useRef<ConfirmDialogRef>(null)
+  const oldEntity = useRef<HostData | undefined>(undefined)
+
+  const openCreateDialog = () => {
+    oldEntity.current = undefined
+    onOpen()
+  }
+
+  useImperativeHandle(props.ref, () => ({
+    openDialog(upd) {
+      oldEntity.current = upd
+      onOpen()
+    }
+  }))
 
   const onSubmit = (data: SubmitData) => {
-    dispatch(
-      savePageData({
+    let promise: Promise<unknown>
+    if (oldEntity.current) {
+      promise = dispatch(replacePageData({
+        entity: {
+          name: data.name,
+          items: data.table,
+          newOssConfig: oldEntity.current.ossId != data.oss.id ? data.oss : undefined,
+        },
+        hostDataId: oldEntity.current.id,
+        host: context.host,
+        config: data.oss
+      }))
+    } else {
+      promise = dispatch(savePageData({
         config: data.oss,
         name: data.name,
         items: data.table,
         host: context.host
-      })
-    ).then(payload => {
+      }))
+    }
+    promise.then(payload => {
       if (isRejected(payload)) {
         confirmDialog.current!.showDialog({
           title: 'Save Failed',
@@ -47,11 +83,11 @@ const DataAddButton: React.FC = () => {
     })
     onClose()
   }
-  
+
 
   return (
     <div>
-      <Button onPress={onOpen} size="sm" color="primary">Save Current Page</Button>
+      <Button onPress={openCreateDialog} size="sm" color="primary">Save Current Page</Button>
       <ConfirmDialog ref={confirmDialog}/>
       <Drawer size="full" isOpen={isOpen} onOpenChange={onOpenChange} placement="bottom">
         <DrawerContent>
@@ -60,7 +96,7 @@ const DataAddButton: React.FC = () => {
               <div>
                 <DrawerHeader className="flex flex-col gap-1">Save Current Page</DrawerHeader>
                 <DrawerBody>
-                  <LocalStoragePresent onSubmit={onSubmit} onCancel={onClose}/>
+                  <LocalStoragePresent onSubmit={onSubmit} onCancel={onClose} oldState={oldEntity.current}/>
                 </DrawerBody>
               </div>
             )
@@ -70,7 +106,6 @@ const DataAddButton: React.FC = () => {
     </div>
   )
 }
-
 
 
 export default DataAddButton
