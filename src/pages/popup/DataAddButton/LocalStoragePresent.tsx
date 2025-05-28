@@ -58,6 +58,14 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
       const storage = await sendMsgToTabAndWaitForResponse('ReadLocalStorageResponse', 'ReadLocalStorage', {
         tabId: context.tab.id,
       })
+      if (typeof storage === 'string') {
+        addToast({
+          title: 'Error',
+          description: storage,
+          color: 'danger',
+        })
+        return
+      }
       const result: StorageItem[] = []
       for (const key of Object.keys(storage)) {
         result.push({

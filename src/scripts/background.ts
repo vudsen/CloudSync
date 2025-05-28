@@ -37,10 +37,16 @@ function localStorageSetItems(items: StorageItem[]) {
 
 async function actualListener(obj: MessageBase) {
   if (isCorrespondMessage(obj, 'ReadLocalStorage')) {
-    const data: Record<string, string> = await executeScript(obj.data.tabId, loadLocalStorageData, [])
-    sendResponseMessage('ReadLocalStorageResponse', data).catch(e => {
-      console.log(e)
-    })
+    try {
+      const data: Record<string, string> = await executeScript(obj.data.tabId, loadLocalStorageData, [])
+      sendResponseMessage('ReadLocalStorageResponse', data).catch(e => {
+        console.log(e)
+      })
+    } catch (e: unknown) {
+      sendResponseMessage('ReadLocalStorageResponse', (e as Error).message).catch(e => {
+        console.log(e)
+      })
+    }
   } else if (isCorrespondMessage(obj, 'SynchronousStorage')) {
     if (obj.data.items.length === 0) {
       return

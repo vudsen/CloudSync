@@ -11,7 +11,10 @@ interface RequestMessage {
 }
 
 interface ResponseMessage {
-  ReadLocalStorageResponse: Record<string, string>
+  /**
+   * 当返回 string 时，表示读取 localStorage 时发生了错误
+   */
+  ReadLocalStorageResponse: Record<string, string> | string
 }
 
 type SendMessageFuncArgs<K extends keyof RequestMessage> = void extends K ? [K] : [K, RequestMessage[K]]
@@ -74,6 +77,7 @@ export const sendMsgToTabAndWaitForResponse = async <T extends keyof RequestMess
 (expectedResponse: R, ...args: SendMessageFuncArgs<T>): Promise<ResponseMessage[R]> => {
   const p = new Promise<ResponseMessage[R]>((resolve) => {
     const cb: MessageListener = message => {
+      console.log(message)
       const msg = JSON.parse(message)
       if (msg.type === expectedResponse) {
         chrome.runtime.onMessage.removeListener(cb)
