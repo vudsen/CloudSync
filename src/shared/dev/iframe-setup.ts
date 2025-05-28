@@ -1,4 +1,7 @@
 import { setLoggerEnabled, setupInIframe } from 'cross-iframe-rpc'
 
-setLoggerEnabled(false)
-window.chrome = setupInIframe<typeof chrome>()
+if (process.env.NODE_ENV === 'development') {
+  setLoggerEnabled(false)
+  window.chrome = setupInIframe<typeof chrome>()
+}
+

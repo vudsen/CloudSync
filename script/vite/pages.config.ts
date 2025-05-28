@@ -17,6 +17,7 @@ export default defineConfig({
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
   },
   build: {
+    sourcemap: true,
     rollupOptions: {
       input: ['options.html', 'popup.html'],
       output: {
