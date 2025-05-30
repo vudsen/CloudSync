@@ -10,16 +10,20 @@ import {
   TableHeader,
   TableRow
 } from '@heroui/react'
-import React from 'react'
-import { useSelector } from 'react-redux'
-import type { RootState } from '@/store'
-import type { OssIndexRecord } from '@/store/oss/ossSlice.ts'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import type { BasicRouteState } from '../../options-type.ts'
+import { listSavedSites } from '@/core/host-data.ts'
+import { createErrorHandler } from '@/util/common.ts'
 
 const SavedSites: React.FC = () => {
-  const hosts = useSelector<RootState, OssIndexRecord>((state) => state.oss.index)
+  const [hosts, setHosts] = useState<string[]>([])
   const navigate = useNavigate()
+  
+  useEffect(() => {
+    listSavedSites().then(setHosts).catch(createErrorHandler('Failed to load saved sites'))
+  }, [])
+  
   const toHostDetail = (host: string) => {
     navigate('/detail?host=' + host, {
       state: {
@@ -39,23 +43,19 @@ const SavedSites: React.FC = () => {
         <Table>
           <TableHeader>
             <TableColumn key="host">Host</TableColumn>
-            <TableColumn key="type">Record Count</TableColumn>
             <TableColumn key="actions">Actions</TableColumn>
           </TableHeader>
           <TableBody emptyContent={'Nothing saved.'}>
             {
-              Object.entries(hosts).map(([host, idx]) => (
+              hosts.map((host) => (
                 <React.Fragment key={host}>
                   {
-                    idx && idx.length > 0 ? (
-                      <TableRow>
-                        <TableCell>{host}</TableCell>
-                        <TableCell>{idx.length}</TableCell>
-                        <TableCell>
-                          <Button color="primary" variant="light" onPress={() => toHostDetail(host)}>Detail</Button>
-                        </TableCell>
-                      </TableRow>
-                    ) : null
+                    <TableRow>
+                      <TableCell>{host}</TableCell>
+                      <TableCell>
+                        <Button color="primary" variant="light" onPress={() => toHostDetail(host)}>Detail</Button>
+                      </TableCell>
+                    </TableRow>
                   }
                 </React.Fragment>
               ))

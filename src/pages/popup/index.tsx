@@ -7,6 +7,7 @@ import store from '@/store'
 import { PersistGate } from 'redux-persist/integration/react'
 import { Provider } from 'react-redux'
 import { ToastProvider } from '@heroui/toast'
+import DialogProvider from '@/component/DialogProvider.tsx'
 
 document.body.innerHTML = '<div id="app"></div>'
 
@@ -18,6 +19,7 @@ root.render(
     <PersistGate persistor={store.persistor}>
       <HeroUIProvider>
         <ToastProvider/>
+        <DialogProvider/>
         <App/>
       </HeroUIProvider>
     </PersistGate>

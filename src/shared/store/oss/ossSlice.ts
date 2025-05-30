@@ -1,10 +1,11 @@
-import type { PayloadAction } from '@reduxjs/toolkit'
+import type {Draft, PayloadAction} from '@reduxjs/toolkit'
 import { isRejected } from '@reduxjs/toolkit'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { createSlice } from '@reduxjs/toolkit'
 import type { BaseOSSConfig } from '@/oss/type.ts'
 import { createOSSInstance } from '@/oss/factory.ts'
 import type { AppThunk, RootState } from '@/store'
+import { deleteHostData, listHostData, saveHostData, updateHostData } from '@/core/host-data'
 
 export type HostData = {
   id: string
@@ -25,19 +26,18 @@ export type HostData = {
    */
   updateDate: number
 }
-export type OssIndexRecord = Record<string, HostData[] | undefined>
 
 export type OssState = {
   configs: BaseOSSConfig[]
   /**
-   * key 为网站域名
+   * 使用 selector 获取该值，当保存配置时会自动更新
    */
-  index: OssIndexRecord
+  version: number
 }
 
 const initialState: OssState = {
   configs: [],
-  index: {}
+  version: 0,
 }
 
 export type StorageItem = {
@@ -56,17 +56,18 @@ function createPageDataKey(url: string, id: string): string {
   return `${url}:${id}`
 }
 
-type CreateIndexParam = HostData & { host: string }
-
 export const savePageData = createAsyncThunk('oss/savePageData', async (data: SaveDataActionParam) => {
   const oss = createOSSInstance(data.config)
   const id = Date.now().toString(10)
   const key = createPageDataKey(data.host, id)
   await oss.insert(key, JSON.stringify(data.items))
-  const r: CreateIndexParam = {
-    ossId: data.config.id, remoteKey: key, host: data.host, name: data.name, updateDate: Date.now(), id
-  }
-  return r
+  await saveHostData(data.host, {
+    ossId: data.config.id,
+    id,
+    name: data.name,
+    updateDate: Date.now(),
+    remoteKey: key
+  })
 })
 
 type UpdateDataActionParam = {
@@ -80,9 +81,8 @@ type UpdateDataActionParam = {
   }
 }
 
-export const replacePageData = createAsyncThunk('oss/replacePageData', async (data: UpdateDataActionParam, { getState }) => {
-  const state = getState() as RootState
-  const indexes = state.oss.index[data.host]
+export const replacePageData = createAsyncThunk('oss/replacePageData', async (data: UpdateDataActionParam) => {
+  const indexes = await listHostData(data.host)
   if (!indexes) {
     throw new Error(`Host not found for ${data.host}`)
   }
@@ -98,37 +98,22 @@ export const replacePageData = createAsyncThunk('oss/replacePageData', async (da
   } else {
     await oldOss.insert(hostData.remoteKey, JSON.stringify(data.entity.items))
   }
-  // update host data object
-  return {
-    id: hostData.id,
+  
+  await updateHostData(data.host, hostData.id, {
     name: data.entity.name,
-    ossId: data.entity.newOssConfig?.id,
-    host: data.host
-  }
+    ossId: data.entity.newOssConfig?.id
+  })
 })
 
-export const deletePageData = createAsyncThunk('oss/deletePageData', async (data: { host: string, id: string }, thunkAPI) => {
-  const state = thunkAPI.getState() as RootState
-  const indexes = state.oss.index[data.host]
-  if (!indexes) {
-    throw new Error(`Host not found for ${data.host}`)
-  }
-  const hostDataPos = indexes.findIndex(index => index.id === data.id)
-  if (hostDataPos < 0) {
-    throw new Error(`Host data not found for ${data.id}`)
-  }
-  const hostData = indexes[hostDataPos]
-  const ossConfig = (thunkAPI.getState() as RootState).oss.configs.find(v => v.id === hostData.ossId)
+export const deletePageData = createAsyncThunk('oss/deletePageData', async (data: {hostData: HostData, host: string}, thunkAPI) => {
+  await deleteHostData(data.host, data.hostData.id)
+  const ossConfig = (thunkAPI.getState() as RootState).oss.configs.find(v => v.id === data.hostData.ossId)
   if (!ossConfig) {
-    throw new Error(`OSS config not found for ${hostData.ossId}`)
+    throw new Error(`OSS config not found for ${data.hostData.ossId}`)
   }
   const oss = createOSSInstance(ossConfig)
-  const remoteKey = createPageDataKey(data.host, data.id)
+  const remoteKey = createPageDataKey(data.host, data.hostData.id)
   await oss.delete(remoteKey)
-  return {
-    host: data.host,
-    offset: hostDataPos
-  }
 })
 
 export const createNewOss = (data: BaseOSSConfig): AppThunk => {
@@ -167,21 +152,7 @@ export const ossSlice = createSlice({
       if (idx < 0) {
         throw new Error('Oss config not found.')
       }
-      Object.keys(state.index).forEach((key) => {
-        const data = state.index[key]
-        if (!data) {
-          return
-        }
-        while (data.length > 0) {
-          if (data[data.length - 1].ossId !== action.payload) {
-            data.pop()
-          }
-        }
-        if (data.length == 0) {
-          state.index[key] = undefined
-        }
-      })
-
+      // TODO 移除保存的数据
       state.configs.splice(idx, 1)
     },
     addOssConfig(state, action: PayloadAction<BaseOSSConfig>) {
@@ -196,47 +167,13 @@ export const ossSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(savePageData.fulfilled, (state, { payload }) => {
-      const idx = state.index[payload.host]
-      const entity: HostData = { ...payload }
-      if (idx) {
-        idx.push(entity)
-      } else {
-        state.index[payload.host] = [entity]
-      }
-    })
-    builder.addCase(deletePageData.fulfilled, (state, { payload }) => {
-      const idx = state.index[payload.host]
-      if (!idx) {
-        return
-      }
-      const entity = idx[payload.offset]
-      if (!entity) {
-        return
-      }
-      if (idx.length === 1) {
-        state.index[payload.host] = undefined
-      } else {
-        idx.splice(payload.offset, 1)
-      }
-    })
-    builder.addCase(replacePageData.fulfilled, (state, { payload }) => {
-      const idx = state.index[payload.host]
-      if (!idx) {
-        return
-      }
-      const entity = idx.find(v => v.id === payload.id)
-      if (!entity) {
-        return
-      }
-      if (payload.name) {
-        entity.name = payload.name
-      }
-      if (payload.ossId) {
-        entity.ossId = payload.ossId
-      }
-      entity.updateDate = Date.now()
-    })
+    const addVersion = (state: Draft<OssState>) => {
+      state.version++
+    }
+
+    builder.addCase(savePageData.fulfilled, addVersion)
+    builder.addCase(replacePageData.fulfilled, addVersion)
+    builder.addCase(deletePageData.fulfilled, addVersion)
     builder.addMatcher(isRejected, (_, action) => {
       console.error(action.error.stack)
     })

@@ -1,8 +1,6 @@
 import { useSearchParams } from 'react-router'
-import { useSelector } from 'react-redux'
-import type { RootState } from '@/store'
+import store from '@/store'
 import type { HostData, StorageItem } from '@/store/oss/ossSlice.ts'
-import type { BaseOSSConfig } from '@/oss/type.ts'
 import { useEffect, useState } from 'react'
 import createOssTemplate from '@/oss/template.ts'
 import {
@@ -10,7 +8,7 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Chip, Code, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader,
+  Chip, Code, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Spinner,
   Table,
   TableBody,
   TableCell,
@@ -18,17 +16,18 @@ import {
   TableHeader,
   TableRow, Tooltip, useDisclosure
 } from '@heroui/react'
+import { getHostDataById } from '@/core/host-data.ts'
+import { createErrorHandler } from '@/util/common.ts'
 
-type State = {
-  hostData: HostData
-  ossConfig: BaseOSSConfig
-}
+
 
 const ViewRecordRoute: React.FC = () => {
   const [searchParams] = useSearchParams()
   const host = searchParams.get('host')
   const id = searchParams.get('id')
   const [items, setItems] = useState<StorageItem[]>([])
+  const [currentHostData, setCurrentHostData] = useState<HostData>()
+  const [isLoading, setLoading] = useState(true)
   const [selectedData, setSelectedData] = useState<string>()
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
@@ -38,38 +37,28 @@ const ViewRecordRoute: React.FC = () => {
     onOpen()
   }
 
-  const state = useSelector<RootState, State | undefined>(state => {
-    if (!host || !id) {
-      return undefined
-    }
-    const hostData = state.oss.index[host]?.find(v => v.id === id)
-    if (!hostData) {
-      console.log(state.oss.index[host], host)
-      console.warn('host data not found')
-      return undefined
-    }
-    const ossConfig = state.oss.configs.find(v => v.id === hostData.ossId)
-    if (!ossConfig) {
-      console.warn('oss not found, id: ' + hostData.ossId)
-      return undefined
-    }
-    return {
-      hostData,
-      ossConfig
-    }
-  })
-  
   useEffect(() => {
-    if (!state) {
-      return
-    }
-    const template = createOssTemplate(state.ossConfig)
-    template.queryStorages(state.hostData.remoteKey).then(r => {
-      setItems(r)
+    getHostDataById(host, id).then(r => {
+      if (!r) {
+        console.warn('host data not found')
+        return
+      }
+      setCurrentHostData(r)
+      const ossConfig = store.store.getState().oss.configs.find(v => v.id === r.ossId)
+      if (!ossConfig) {
+        console.warn('oss not found, id: ' + r.ossId)
+        return
+      }
+      const template = createOssTemplate(ossConfig)
+      template.queryStorages(r.remoteKey).then(r => {
+        setItems(r)
+      })
+    }).catch(createErrorHandler('Failed to load host data')).finally(() => {
+      setLoading(false)
     })
-  }, [state])
+  }, [host, id])
 
-  if (!state) {
+  if (!isLoading && !currentHostData) {
     return (
       <div>
         <span>Host data not found.</span>
@@ -83,7 +72,7 @@ const ViewRecordRoute: React.FC = () => {
         <CardHeader>
           <div>
             The Stored Items Of &nbsp;
-            <Chip color="primary">{ state.hostData.name }</Chip>
+            <Chip color="primary">{ currentHostData?.name }</Chip>
           </div>
         </CardHeader>
         <CardBody>
@@ -92,7 +81,10 @@ const ViewRecordRoute: React.FC = () => {
               <TableColumn key="name">Name</TableColumn>
               <TableColumn key="data">Data</TableColumn>
             </TableHeader>
-            <TableBody>
+            <TableBody emptyContent={
+              isLoading ?
+                <Spinner classNames={{ label: 'text-foreground mt-4' }} label="wave" variant="wave" /> :
+                'No data available.'}>
               {
                 items.map(v => (
                   <TableRow key={v.name}>
