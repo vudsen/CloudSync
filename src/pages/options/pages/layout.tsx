@@ -26,7 +26,7 @@ const Layout: React.FC = () => {
         <div className="w-[10rem]">
           <div className="flex flex-col border border-gray-200 h-full fixed left-0 top-0 w-[10rem]">
             <div className="text-center m-3 text-primary text-2xl" title="Storage Sync2 Cloud">
-              SS2C
+              CloudSync
             </div>
             <div className="flex flex-col">
               {
