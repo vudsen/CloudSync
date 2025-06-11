@@ -1,7 +1,7 @@
 {
   "name": "storage-sync2-cloud",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "prepare:dev": "cross-env NODE_ENV=development node script/prepare-dev.mjs",
@@ -17,7 +17,6 @@
     "@heroui/theme": "2.4.14-beta.2",
     "@heroui/toast": "^2.0.7",
     "@reduxjs/toolkit": "^2.5.0",
-    "cross-iframe-rpc": "^1.1.3",
     "framer-motion": "^12.7.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -39,6 +38,7 @@
     "autoprefixer": "^10.4.20",
     "chrome-types": "^0.1.329",
     "cross-env": "^7.0.3",
+    "cross-iframe-rpc": "^1.2.1",
     "eslint": "^9.17.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",

@@ -79,6 +79,10 @@ export class LocalOSS implements OSS {
     this.config = createLocalConfig(useSync)
   }
 
+  isUnique(): boolean {
+    return true
+  }
+
   usedBytes(): Promise<number> {
     return this.storage.getBytesInUse()
   }

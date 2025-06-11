@@ -8,7 +8,7 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Chip, Code, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Spinner,
+  Code, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Spinner,
   Table,
   TableBody,
   TableCell,
@@ -18,6 +18,8 @@ import {
 } from '@heroui/react'
 import { getHostDataById } from '@/core/host-data.ts'
 import { createErrorHandler } from '@/util/common.ts'
+import { getTranslationAsReactNode } from '@/util/getTranslation.tsx'
+import Translation from '@/component/Translation.tsx'
 
 
 
@@ -53,7 +55,7 @@ const ViewRecordRoute: React.FC = () => {
       template.queryStorages(r.remoteKey).then(r => {
         setItems(r)
       })
-    }).catch(createErrorHandler('Failed to load host data')).finally(() => {
+    }).catch(createErrorHandler(getTranslationAsReactNode('failedToLoad'))).finally(() => {
       setLoading(false)
     })
   }, [host, id])
@@ -70,9 +72,8 @@ const ViewRecordRoute: React.FC = () => {
     <>
       <Card className="w-full">
         <CardHeader>
-          <div>
-            The Stored Items Of &nbsp;
-            <Chip color="primary">{ currentHostData?.name }</Chip>
+          <div className="font-bold text-lg text-primary">
+            { currentHostData?.name }
           </div>
         </CardHeader>
         <CardBody>
@@ -92,7 +93,7 @@ const ViewRecordRoute: React.FC = () => {
                     <TableCell>
                       { v.data.length > 50 ?
                         (
-                          <Tooltip content={`Click to show all (${v.data.length} chars).`}>
+                          <Tooltip content={getTranslationAsReactNode('clickToShowAll', v.data.length)}>
                             <Link className="truncate cursor-pointer" onPress={() => viewData(v.data)}>
                               {v.data.substring(0, 50)}...
                             </Link>
@@ -111,13 +112,15 @@ const ViewRecordRoute: React.FC = () => {
         <ModalContent>
           {onClose => (
             <>
-              <ModalHeader>Storage Data</ModalHeader>
+              <ModalHeader>
+                <Translation i18nKey="storageDetail"/>
+              </ModalHeader>
               <ModalBody>
                 <Code className="whitespace-normal break-words">{selectedData}</Code>
               </ModalBody>
               <ModalFooter>
                 <Button variant="light" onPress={onClose}>
-                  Close
+                  <Translation i18nKey="close"/>
                 </Button>
               </ModalFooter>
             </>

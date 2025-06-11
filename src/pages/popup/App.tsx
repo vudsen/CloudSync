@@ -5,6 +5,7 @@ import DataAddButton from './DataAddButton'
 import PopupContext from './context.ts'
 import { Link } from '@heroui/react'
 import type { HostData } from '@/store/oss/ossSlice.ts'
+import Translation from '@/component/Translation.tsx'
 
 const App = () => {
   const [tab, setTab] = useState<chrome.tabs.Tab>()
@@ -55,7 +56,9 @@ const App = () => {
         </div>
         <div className="flex-1"/>
         <div className="flex justify-around">
-          <Link size="sm" color="primary" isBlock showAnchorIcon className="cursor-pointer" onPress={toOptions}>Options</Link>
+          <Link size="sm" color="primary" isBlock showAnchorIcon className="cursor-pointer" onPress={toOptions}>
+            <Translation i18nKey="options"/>
+          </Link>
           <Link size="sm" color="secondary" isBlock showAnchorIcon className="cursor-pointer" onPress={gotoGitHub}>Github</Link>
         </div>
       </div>

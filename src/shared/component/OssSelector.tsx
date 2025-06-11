@@ -3,6 +3,7 @@ import { Select, SelectItem, Tooltip } from '@heroui/react'
 import type { ChangeEventHandler } from 'react'
 import React from 'react'
 import type { OssType } from '@/oss/type.ts'
+import Translation from '@/component/Translation.tsx'
 
 
 interface OssSelectorProps {
@@ -20,7 +21,7 @@ const OssSelector: React.FC<OssSelectorProps> = props => {
   }
   return (
     <Select items={supportedOSS} 
-      label="Select a OSS Provider" 
+      label={<Translation i18nKey="selectOssProvider"/>}
       size="sm" 
       color="primary"
       defaultSelectedKeys={props.initialValue ? [props.initialValue] : []}

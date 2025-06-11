@@ -1,0 +1,42 @@
+{
+  "saveCurrentPage": {
+    "message": "保存当前页面",
+    "description": "Button to save the current page"
+  },
+  "noData": {
+    "message": "没有数据可用",
+    "description": "Message displayed when there is no data to show"
+  },
+  "noDataOnSite": {
+    "message": "$host$ 上没有可用数据",
+    "placeholders": {
+      "host": {
+        "content": "$1"
+      }
+    }
+  },
+  "options": {
+    "message": "选项",
+    "description": "Label for the options page"
+  },
+  "name": {
+    "message": "名称",
+    "description": "Label for the name field"
+  },
+  "actions": {
+    "message": "操作",
+    "description": "Label for the actions section"
+  },
+  "ossProvider": {
+    "message": "OSS 提供商",
+    "description": "Label for the OSS provider selection"
+  },
+  "save": {
+    "message": "保存",
+    "description": "Button to save changes"
+  },
+  "close": {
+    "message": "关闭",
+    "description": "Button to close the dialog or modal"
+  }
+}

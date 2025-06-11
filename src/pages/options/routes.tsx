@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router'
 import React from 'react'
 import Layout from './pages/layout.tsx'
 import type { RouteMeta } from './options-type.ts'
+import { getTranslationAsReactNode } from '@/util/getTranslation.tsx'
 
 const OverView = React.lazy(() => import('./pages/(Home)'))
 const Settings = React.lazy(() => import('./pages/settings'))
@@ -30,14 +31,14 @@ const RootRoutes = createBrowserRouter([
         path: '/detail',
         element: <SiteDetail/>,
         handle: {
-          name: 'Site Detail',
+          name: getTranslationAsReactNode('siteDetail'),
         } satisfies RouteMeta
       },
       {
         path: '/detail/view',
         element: <ViewRecordRoute/>,
         handle: {
-          name: 'Storage Detail',
+          name: getTranslationAsReactNode('storageDetail'),
         } satisfies RouteMeta,
       }
     ]

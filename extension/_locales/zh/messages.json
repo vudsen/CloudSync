@@ -1,0 +1,160 @@
+{
+  "saveCurrentPage": {
+    "message": "保存当前页面"
+  },
+  "noData": {
+    "message": "没有数据可用"
+  },
+  "noDataOnSite": {
+    "message": "$host$ 上没有可用数据",
+    "placeholders": {
+      "host": {
+        "content": "$1"
+      }
+    }
+  },
+  "options": {
+    "message": "选项"
+  },
+  "name": {
+    "message": "名称"
+  },
+  "actions": {
+    "message": "操作"
+  },
+  "ossProvider": {
+    "message": "OSS 提供商"
+  },
+  "save": {
+    "message": "保存"
+  },
+  "close": {
+    "message": "关闭"
+  },
+  "view": {
+    "message": "查看"
+  },
+  "apply": {
+    "message": "应用"
+  },
+  "error": {
+    "message": "错误"
+  },
+  "atLeastSelectOne": {
+    "message": "至少选中表格中的一行"
+  },
+  "home": {
+    "message": "首页"
+  },
+  "settings": {
+    "message": "设置"
+  },
+  "savedSites": {
+    "message": "已保存的网站"
+  },
+  "usedBytes": {
+    "message": "已占用的大小"
+  },
+  "createOssProvider": {
+    "message": "创建 OSS 提供商"
+  },
+  "detail": {
+    "message": "详情"
+  },
+  "update": {
+    "message": "更新"
+  },
+  "updateOssProvider": {
+    "message": "更新 OSS 提供商"
+  },
+  "selectOssProvider": {
+    "message": "选择一个 OSS 提供商"
+  },
+  "syncToCloud": {
+    "message": "将数据同步到云端"
+  },
+  "saveDataToYourAccount": {
+    "message": "将数据保存到你的账户中"
+  },
+  "delete": {
+    "message": "删除"
+  },
+  "localOss": {
+    "message": "本地"
+  },
+  "localOssDescription": {
+    "message": "本地 OSS 提供商用于存储数据在本地浏览器中，你也可以选择将数据保存到账户中。"
+  },
+  "ossAlreadyExists": {
+    "message": "该 OSS 不允许创建多个"
+  },
+  "createFailed": {
+    "message": "创建失败"
+  },
+  "cancel": {
+    "message": "取消"
+  },
+  "confirm": {
+    "message": "确认"
+  },
+  "settingEmpty": {
+    "message": "目前还并没有任何设置项，不过未来可能会有。。。"
+  },
+  "storageReady": {
+    "message": "数据已准备就绪，刷新页面以替换 localStorage"
+  },
+  "deleteTip": {
+    "message": "确定要删除这条记录吗?"
+  },
+  "deleteOssTip": {
+    "message": "确定要删除这个 OSS 吗?"
+  },
+  "saveFailed": {
+    "message": "保存失败: $reason$",
+    "placeholders": {
+      "reason": {
+        "content": "$1"
+      }
+    }
+  },
+  "storageSaveSuccess": {
+    "message": "成功保存 $count$ 条数据到 $ossName$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "ossName": {
+        "content": "$2"
+      }
+    }
+  },
+  "saveSuccess": {
+    "message": "保存成功"
+  },
+  "siteDetail": {
+    "message": "站点详情"
+  },
+  "storageDetail": {
+    "message": "数据详情"
+  },
+  "clickToShowAll": {
+    "message": "点击显示全部($count$ 个字符)",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "failedToLoad": {
+    "message": "加载失败"
+  },
+  "unknownError": {
+    "message": "未知错误"
+  },
+  "applyStorageMsg": {
+    "message": "确定要应用这些数据吗？这将覆盖当前的 localStorage 数据。"
+  },
+  "applyStorage": {
+    "message": "应用数据"
+  }
+}

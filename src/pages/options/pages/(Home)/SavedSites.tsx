@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router'
 import type { BasicRouteState } from '../../options-type.ts'
 import { listSavedSites } from '@/core/host-data.ts'
 import { createErrorHandler } from '@/util/common.ts'
+import Translation from '@/component/Translation.tsx'
 
 const SavedSites: React.FC = () => {
   const [hosts, setHosts] = useState<string[]>([])
@@ -36,14 +37,16 @@ const SavedSites: React.FC = () => {
     <Card>
       <CardHeader>
         <div className="text-primary text-lg">
-          Saved Sites
+          <Translation i18nKey="savedSites"/>
         </div>
       </CardHeader>
       <CardBody>
         <Table>
           <TableHeader>
             <TableColumn key="host">Host</TableColumn>
-            <TableColumn key="actions">Actions</TableColumn>
+            <TableColumn key="actions">
+              <Translation i18nKey="actions"/>
+            </TableColumn>
           </TableHeader>
           <TableBody emptyContent={'Nothing saved.'}>
             {
@@ -53,7 +56,9 @@ const SavedSites: React.FC = () => {
                     <TableRow>
                       <TableCell>{host}</TableCell>
                       <TableCell>
-                        <Button color="primary" variant="light" onPress={() => toHostDetail(host)}>Detail</Button>
+                        <Button color="primary" variant="light" onPress={() => toHostDetail(host)}>
+                          <Translation i18nKey="detail"/>
+                        </Button>
                       </TableCell>
                     </TableRow>
                   }

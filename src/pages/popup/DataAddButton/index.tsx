@@ -17,6 +17,8 @@ import PopupContext from '../context.ts'
 import type { ConfirmDialogRef } from '@/component/ConfirmDialog.tsx'
 import ConfirmDialog from '@/component/ConfirmDialog.tsx'
 import { isRejected } from '@reduxjs/toolkit'
+import Translation from '@/component/Translation.tsx'
+import { getTranslationAsReactNode } from '@/util/getTranslation'
 
 export interface DataAddButtonRef {
   openDialog: (entity?: HostData) => void
@@ -70,14 +72,15 @@ const DataAddButton: React.FC<DataAddButtonProps> = props => {
       if (isRejected(payload)) {
         confirmDialog.current!.showDialog({
           title: 'Save Failed',
-          message: 'Failed to save data: ' + payload.error.message,
+          message: getTranslationAsReactNode('saveFailed', payload.error.message),
           color: 'danger'
         })
         console.error(payload)
       } else {
         confirmDialog.current!.showDialog({
-          title: 'Save Success',
-          message: `Saved ${data.table.length} items to ${data.oss.name}`,
+          title: getTranslationAsReactNode('saveSuccess'),
+          color: 'primary',
+          message: getTranslationAsReactNode('storageSaveSuccess', [data.table.length, data.oss.name]),
         })
       }
     })
@@ -87,14 +90,18 @@ const DataAddButton: React.FC<DataAddButtonProps> = props => {
 
   return (
     <div>
-      <Button onPress={openCreateDialog} size="sm" color="primary">Save Current Page</Button>
+      <Button onPress={openCreateDialog} size="sm" color="primary">
+        <Translation i18nKey="saveCurrentPage"/>
+      </Button>
       <ConfirmDialog ref={confirmDialog}/>
       <Drawer size="full" isOpen={isOpen} onOpenChange={onOpenChange} placement="bottom">
         <DrawerContent>
           {
             (onClose) => (
               <div>
-                <DrawerHeader className="flex flex-col gap-1">Save Current Page</DrawerHeader>
+                <DrawerHeader className="flex flex-col gap-1">
+                  <Translation i18nKey="saveCurrentPage"/>
+                </DrawerHeader>
                 <DrawerBody>
                   <LocalStoragePresent onSubmit={onSubmit} onCancel={onClose} oldState={oldEntity.current}/>
                 </DrawerBody>

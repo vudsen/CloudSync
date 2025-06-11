@@ -3,15 +3,16 @@ import { Outlet, useLocation, useMatches, useNavigate } from 'react-router'
 import { Button, Divider } from '@heroui/react'
 import type { RouteMeta } from '../options-type.ts'
 import Back from '@/icons/Back.tsx'
+import Translation from '@/component/Translation.tsx'
 
 const tabs = [
   {
     path: '/',
-    name: 'Home',
+    name: <Translation i18nKey="home"/>,
   },
   {
     path: '/settings',
-    name: 'Settings',
+    name: <Translation i18nKey="settings"/>,
   }
 ]
 const Layout: React.FC = () => {
@@ -30,7 +31,7 @@ const Layout: React.FC = () => {
             <div className="flex flex-col">
               {
                 tabs.map((tab) => (
-                  <Button key={tab.name} radius="none" variant="light" onPress={() => navigate(tab.path)}>
+                  <Button key={tab.path} radius="none" variant="light" onPress={() => navigate(tab.path)}>
                     <span className={location.pathname === tab.path ? 'font-bold' : ''}>{tab.name}</span>
                   </Button>
                 ))

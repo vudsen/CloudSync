@@ -77,7 +77,6 @@ export const sendMsgToTabAndWaitForResponse = async <T extends keyof RequestMess
 (expectedResponse: R, ...args: SendMessageFuncArgs<T>): Promise<ResponseMessage[R]> => {
   const p = new Promise<ResponseMessage[R]>((resolve) => {
     const cb: MessageListener = message => {
-      console.log(message)
       const msg = JSON.parse(message)
       if (msg.type === expectedResponse) {
         chrome.runtime.onMessage.removeListener(cb)

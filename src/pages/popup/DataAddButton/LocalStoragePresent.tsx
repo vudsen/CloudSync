@@ -14,6 +14,8 @@ import type { SubmitHandler } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
 import { addToast } from '@heroui/toast'
 import type { BaseOSSConfig } from '@/oss/type.ts'
+import Translation from '@/component/Translation.tsx'
+import getTranslation from '@/util/getTranslation'
 
 type Inputs = {
   oss: string
@@ -60,7 +62,7 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
       })
       if (typeof storage === 'string') {
         addToast({
-          title: 'Error',
+          title: getTranslation('error'),
           description: storage,
           color: 'danger',
         })
@@ -77,7 +79,7 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
     })().catch(e => {
       console.error(e)
       addToast({
-        title: 'Error',
+        title: getTranslation('error'),
         description: 'Failed to load local storage data',
         color: 'danger',
       })
@@ -130,7 +132,7 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
                 </ModalBody>
                 <ModalFooter>
                   <Button color="primary" onPress={onClose}>
-                    Close
+                    <Translation i18nKey="close"/>
                   </Button>
                 </ModalFooter>
               </>
@@ -139,8 +141,21 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
         </ModalContent>
       </Modal>
       <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
-        <Input label="Name" placeholder="Name" isRequired type="text" {...register('name')} defaultValue={props.oldState?.name}/>
-        <Select label="OSS Provider" size="sm" color="primary" className="my-4" isRequired {...register('oss')} defaultSelectedKeys={props.oldState ? [props.oldState.ossId] : []}>
+        <Input
+          label={<Translation i18nKey="name"/>}
+          isRequired
+          type="text"
+          {...register('name')}
+          defaultValue={props.oldState?.name}/>
+        <Select
+          label={<Translation i18nKey="ossProvider"/>}
+          size="sm"
+          color="primary"
+          className="my-4"
+          isRequired
+          {...register('oss')}
+          defaultSelectedKeys={props.oldState ? [props.oldState.ossId] : []}
+        >
           {
             configs.map(oss => (
               <SelectItem key={oss.id} classNames={{
@@ -153,7 +168,7 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
         </Select>
         <div className="my-4 w-full">
           {
-            tableEmptyAlertVisible ? <Alert hideIcon color="danger" description="At least select one table item"/> : null
+            tableEmptyAlertVisible ? <Alert hideIcon color="danger" description={<Translation i18nKey="atLeastSelectOne"/>}/> : null
           }
         </div>
         <Table
@@ -166,11 +181,13 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
             base: 'max-h-[300px] [&>div]:overflow-x-hidden',
           }}>
           <TableHeader>
-            <TableColumn>Name</TableColumn>
-            <TableColumn>Action</TableColumn>
+            <TableColumn><Translation i18nKey="name"/></TableColumn>
+            <TableColumn><Translation i18nKey="actions"/></TableColumn>
           </TableHeader>
           <TableBody isLoading={loading} loadingContent={<Spinner label="Loading..." />} items={storage} emptyContent={
-            <p className="text-ellipsis overflow-hidden">No data on {host}</p>
+            <p className="text-ellipsis overflow-hidden">
+              <Translation i18nKey="noDataOnSite" args={[host]} />
+            </p>
           }>
             {(item) => (
               <TableRow key={item.name}>
@@ -181,7 +198,7 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
                 </TableCell>
                 <TableCell>
                   <Button variant="light" color="primary" onPress={() => onRowClick(item)}>
-                    View
+                    <Translation i18nKey="view"/>
                   </Button>
                 </TableCell>
               </TableRow>
@@ -190,9 +207,11 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
         </Table>
         <div className="flex flex-row-reverse my-4">
           <Button type="submit" color="primary">
-            {props.oldState ? 'Update' : 'Save'}
+            {props.oldState ? <Translation i18nKey="update"/> : <Translation i18nKey="save"/>}
           </Button>
-          <Button variant="light" color="danger" onPress={props.onCancel} className="mx-2">Close</Button>
+          <Button variant="light" color="danger" onPress={props.onCancel} className="mx-2">
+            <Translation i18nKey="close"/>
+          </Button>
         </div>
       </form>
     </>

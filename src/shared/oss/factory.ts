@@ -1,10 +1,11 @@
-import type { BaseOSSConfig, OSS, OSSUIProps } from './type.ts'
-import { OssType } from './type.ts'
-import { LocalOSS } from './remote/local.tsx'
-import type { LocalOSSConfig } from '@/oss/remote/local.tsx'
-import { LocalOSSUI } from '@/oss/remote/local.tsx'
-import { requireNonNull } from '@/util/common.ts'
+import type { BaseOSSConfig, OSS, OSSUIProps } from './type'
+import { OssType } from './type'
+import { LocalOSS } from './remote/local'
+import type { LocalOSSConfig } from '@/oss/remote/local'
+import { LocalOSSUI } from '@/oss/remote/local'
+import { requireNonNull } from '@/util/common'
 import type React from 'react'
+import getTranslation from '@/util/getTranslation'
 
 export const createOSSInstance = (config: BaseOSSConfig) : OSS => {
   if (config.type === OssType.ACCOUNT) {
@@ -22,7 +23,7 @@ export type OSSDescription = {
 export const supportedOSS: OSSDescription[] = [
   {
     name: OssType.ACCOUNT,
-    description: 'Save the data to your browser account.'
+    description: getTranslation('localOssDescription')
   }
 ]
 

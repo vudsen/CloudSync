@@ -21,6 +21,8 @@ import { useAppDispatch } from '@/store/hooks.ts'
 import { showDialog } from '@/component/DialogProvider.tsx'
 import { isRejected } from '@reduxjs/toolkit'
 import { addToast } from '@heroui/toast'
+import Translation from '@/component/Translation.tsx'
+import getTranslation from '@/util/getTranslation'
 
 interface StorageListProps {
   onRequireReplace: (data: HostData) => void
@@ -34,15 +36,15 @@ const StorageList: React.FC<StorageListProps> = props => {
   const dispatch = useAppDispatch()
 
   const [hostDataItems, setHostDataItems] = useState<HostData[]>([])
-  
+
   useEffect(() => {
     listHostData(host).then(setHostDataItems).catch(createErrorHandler('Failed to load host data'))
   }, [host, version])
-  
+
   const deleteHostDataCb = (hostData: HostData) => {
     showDialog({
-      title: 'Delete',
-      message: 'Are you sure you want to delete this record?',
+      title: getTranslation('delete'),
+      message: getTranslation('deleteTip'),
       color: 'danger',
       onConfirm() {
         dispatch(deletePageData({
@@ -70,10 +72,10 @@ const StorageList: React.FC<StorageListProps> = props => {
     <>
       <Table>
         <TableHeader>
-          <TableColumn key="Name">Name</TableColumn>
-          <TableColumn key="action">Actions</TableColumn>
+          <TableColumn key="Name"><Translation i18nKey="name"/></TableColumn>
+          <TableColumn key="action"><Translation i18nKey="actions"/></TableColumn>
         </TableHeader>
-        <TableBody emptyContent={'No data'}>
+        <TableBody emptyContent={<Translation i18nKey="noData"/>}>
           {
             hostDataItems.map(v => (
               <TableRow key={v.id}>
@@ -82,9 +84,13 @@ const StorageList: React.FC<StorageListProps> = props => {
                   <Link color="primary"
                     underline="hover" 
                     className="cursor-pointer" 
-                    onPress={() => applyRef.current?.apply(v)}>Apply</Link>
-                  <Link color="secondary" underline="hover" className="cursor-pointer mx-2" onPress={() => props.onRequireReplace(v)}>Update</Link>
-                  <Link color="danger" underline="hover" className="cursor-pointer" onPress={() => deleteHostDataCb(v)}>Delete</Link>
+                    onPress={() => applyRef.current?.apply(v)}><Translation i18nKey="apply"/></Link>
+                  <Link color="secondary" underline="hover" className="cursor-pointer mx-2" onPress={() => props.onRequireReplace(v)}>
+                    <Translation i18nKey="update"/>
+                  </Link>
+                  <Link color="danger" underline="hover" className="cursor-pointer" onPress={() => deleteHostDataCb(v)}>
+                    <Translation i18nKey="delete"/>
+                  </Link>
                 </TableCell>
               </TableRow>
             ))

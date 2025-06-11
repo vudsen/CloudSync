@@ -5,6 +5,7 @@ import createOssTemplate from '@/oss/template.ts'
 import store from '@/store'
 import { addToast } from '@heroui/toast'
 import { sendMessageToBackground } from '@/util/extension.ts'
+import Translation from '@/component/Translation.tsx'
 
 export interface ApplyStorageModalRef {
   apply: (data: HostData) => void
@@ -26,7 +27,6 @@ const ApplyStorageModal: React.FC<ApplyStorageModalProps> = (props) => {
   }))
 
   const doApply = () => {
-    console.log('=====')
     if (!data) {
       console.error('Data is null')
       return
@@ -54,7 +54,6 @@ const ApplyStorageModal: React.FC<ApplyStorageModalProps> = (props) => {
         return
       }
       const items = await oss.queryStorages(data.remoteKey)
-      console.log('iii')
       await sendMessageToBackground('SynchronousStorage', {
         tabId: tab.id,
         items
@@ -77,16 +76,18 @@ const ApplyStorageModal: React.FC<ApplyStorageModalProps> = (props) => {
         {
           (onClose) => (
             <>
-              <ModalHeader>Apply Storage</ModalHeader>
+              <ModalHeader>
+                <Translation i18nKey="applyStorage"/>
+              </ModalHeader>
               <ModalBody>
-                Are you sure you want to apply this storage?
+                <Translation i18nKey="applyStorageMsg"/>
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
-                  Close
+                  <Translation i18nKey="cancel"/>
                 </Button>
                 <Button color="primary" onPress={doApply}>
-                  Confirm
+                  <Translation i18nKey="confirm"/>
                 </Button>
               </ModalFooter>
             </>

@@ -19,7 +19,9 @@ import ConfirmDialog from '@/component/ConfirmDialog.tsx'
 import { addToast } from '@heroui/toast'
 import { isRejected } from '@reduxjs/toolkit'
 import { listHostData } from '@/core/host-data.ts'
-import { createErrorHandler } from '@/util/common.ts'
+import { createErrorHandler, formatTimestampToDateString } from '@/util/common.ts'
+import getTranslation from '@/util/getTranslation'
+import Translation from '@/component/Translation.tsx'
 
 const SiteDetail: React.FC = () => {
   const [searchParams] = useSearchParams()
@@ -51,8 +53,8 @@ const SiteDetail: React.FC = () => {
 
   const deleteData = (hostData: HostData) => {
     confirmDialog.current!.showDialog({
-      title: 'Delete',
-      message: 'Are you sure you want to delete this record?',
+      title: getTranslation('delete'),
+      message: getTranslation('deleteTip'),
       color: 'danger',
       onConfirm: () => {
         dispatch(deletePageData({ hostData, host })).then((r) => {
@@ -98,10 +100,14 @@ const SiteDetail: React.FC = () => {
                 hostDataItems.map(data => (
                   <TableRow key={data.remoteKey}>
                     <TableCell>{data.name}</TableCell>
-                    <TableCell>{data.updateDate}</TableCell>
+                    <TableCell>{formatTimestampToDateString(data.updateDate)}</TableCell>
                     <TableCell>
-                      <Link color="primary" underline="hover" className="cursor-pointer" onPress={() => viewData(data.id)}>View</Link>
-                      <Link color="danger" underline="hover" className="cursor-pointer mx-3" onPress={() => deleteData(data)}>Delete</Link>
+                      <Link color="primary" underline="hover" className="cursor-pointer" onPress={() => viewData(data.id)}>
+                        <Translation i18nKey="view"/>
+                      </Link>
+                      <Link color="danger" underline="hover" className="cursor-pointer mx-3" onPress={() => deleteData(data)}>
+                        <Translation i18nKey="delete"/>
+                      </Link>
                     </TableCell>
                   </TableRow>
                 ))

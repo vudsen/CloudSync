@@ -1,5 +1,7 @@
+import type React from 'react'
+
 export type RouteMeta = {
-  name?: string
+  name?: React.ReactNode
 }
 
 export type BasicRouteState = {

@@ -19,6 +19,8 @@ import { UsedSize } from './UsedSize.tsx'
 import { showDialog } from '@/component/DialogProvider.tsx'
 import { addToast } from '@heroui/toast'
 import type { BaseOSSConfig } from '@/oss/type.ts'
+import Translation from '@/component/Translation.tsx'
+import getTranslation from "@/util/getTranslation";
 
 
 
@@ -52,9 +54,10 @@ const OssProviders:React.FC = () => {
     } catch (e: unknown) {
       console.error(e)
       showDialog({
-        title: 'Create Failed',
+        title: getTranslation('createFailed'),
         message: (e as Error).message,
-        color: 'danger'
+        color: 'danger',
+        hideCancel: true
       })
     }
   }
@@ -66,8 +69,8 @@ const OssProviders:React.FC = () => {
   
   const onDelete = (config: BaseOSSConfig) => {
     showDialog({
-      title: 'Delete ' + config.name,
-      message: 'Are you sure to delete this OSS provider?',
+      title: getTranslation('delete') + ' ' + config.name,
+      message: getTranslation('deleteOssTip'),
       color: 'danger',
       onConfirm() {
         try {
@@ -78,9 +81,10 @@ const OssProviders:React.FC = () => {
           })
         } catch (e: unknown) {
           showDialog({
-            title: 'Create Failed',
+            title: getTranslation('createFailed'),
             message: (e as Error).message,
-            color: 'danger'
+            color: 'danger',
+            hideCancel: true
           })
         }
       }
@@ -92,18 +96,26 @@ const OssProviders:React.FC = () => {
       <Card className="my-8">
         <CardHeader className="flex justify-between">
           <div className="text-primary text-lg">
-            OSS Providers
+            <Translation i18nKey="ossProvider"/>
           </div>
           <div>
-            <Button variant="bordered" color="primary" onPress={onOpen}>Create Provider</Button>
+            <Button variant="bordered" color="primary" onPress={onOpen}>
+              <Translation i18nKey="createOssProvider"/>
+            </Button>
           </div>
         </CardHeader>
         <CardBody>
           <Table>
             <TableHeader>
-              <TableColumn key="host">OSS Name</TableColumn>
-              <TableColumn key="lastUpdate">Used Size</TableColumn>
-              <TableColumn key="actions">Actions</TableColumn>
+              <TableColumn key="host">
+                <Translation i18nKey="name"/>
+              </TableColumn>
+              <TableColumn key="usedBytes">
+                <Translation i18nKey="usedBytes"/>
+              </TableColumn>
+              <TableColumn key="actions">
+                <Translation i18nKey="actions"/>
+              </TableColumn>
             </TableHeader>
             <TableBody emptyContent="No OSS available.">
               {
@@ -112,9 +124,13 @@ const OssProviders:React.FC = () => {
                     <TableCell>{provider.type}</TableCell>
                     <TableCell><UsedSize config={provider}/></TableCell>
                     <TableCell>
-                      <Button color="primary" variant="flat" onPress={() => onUpdate(provider)}>Update</Button>
+                      <Button color="primary" variant="flat" onPress={() => onUpdate(provider)}>
+                        <Translation i18nKey="update"/>
+                      </Button>
                       &nbsp;
-                      <Button color="danger" variant="flat" onPress={() => onDelete(provider)}>Delete</Button>
+                      <Button color="danger" variant="flat" onPress={() => onDelete(provider)}>
+                        <Translation i18nKey="delete"/>
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))
@@ -129,7 +145,7 @@ const OssProviders:React.FC = () => {
             onClose => (
               <>
                 <DrawerHeader>
-                  {oldEntity ? 'Update' : 'Create New'} Oss Provider
+                  {oldEntity ? <Translation i18nKey="updateOssProvider"/> : <Translation i18nKey="createOssProvider"/>}
                 </DrawerHeader>
                 <DrawerBody>
                   <OssProviderForm oldEntity={oldEntity}  ref={form}/>

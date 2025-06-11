@@ -10,6 +10,10 @@ export interface OSS {
    * 已使用的空间
    */
   usedBytes(): Promise<number>
+  /**
+   * 此类配置是否只能创建一个
+   */
+  isUnique(): boolean
 }
 
 export interface OSSUIRef {

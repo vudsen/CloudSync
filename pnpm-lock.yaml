@@ -23,9 +23,6 @@ importers:
       '@reduxjs/toolkit':
         specifier: ^2.5.0
         version: 2.5.0(react-redux@9.2.0(@types/react@19.0.7)(react@19.1.0)(redux@5.0.1))(react@19.1.0)
-      cross-iframe-rpc:
-        specifier: ^1.1.3
-        version: 1.1.3
       framer-motion:
         specifier: ^12.7.4
         version: 12.7.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -84,6 +81,9 @@ importers:
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
+      cross-iframe-rpc:
+        specifier: ^1.2.1
+        version: 1.2.1
       eslint:
         specifier: ^9.17.0
         version: 9.17.0(jiti@2.4.2)
@@ -2149,8 +2149,8 @@ packages:
     engines: {node: '>=10.14', npm: '>=6', yarn: '>=1'}
     hasBin: true
 
-  cross-iframe-rpc@1.1.3:
-    resolution: {integrity: sha512-KmY8jULgI+A5/VVPWrFFa15+U/H/5xl8allbZCUokd2N299nDn5JU1LEWDWWvRT3k7jXtO6wWTIV0c8syJfAgA==}
+  cross-iframe-rpc@1.2.1:
+    resolution: {integrity: sha512-j5dPfeUl4GwT5aO/zOaSZD0VDjAhySuyqVI42kwV9uzktJL9EvUs//itF0w/cqODLzUgJubZP9PxfdcP/JMfpg==}
 
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
@@ -5923,7 +5923,7 @@ snapshots:
     dependencies:
       cross-spawn: 7.0.6
 
-  cross-iframe-rpc@1.1.3:
+  cross-iframe-rpc@1.2.1:
     dependencies:
       quick-lru: 7.0.0
 

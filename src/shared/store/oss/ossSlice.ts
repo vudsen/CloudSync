@@ -6,6 +6,7 @@ import type { BaseOSSConfig } from '@/oss/type.ts'
 import { createOSSInstance } from '@/oss/factory.ts'
 import type { AppThunk, RootState } from '@/store'
 import { deleteHostData, listHostData, saveHostData, updateHostData } from '@/core/host-data'
+import getTranslation from "@/util/getTranslation";
 
 export type HostData = {
   id: string
@@ -121,7 +122,9 @@ export const createNewOss = (data: BaseOSSConfig): AppThunk => {
     const state = getState() as RootState
     const old = state.oss.configs.find(v => v.id === data.id)
     if (old) {
-      throw new Error('Already existed.')
+      if (createOSSInstance(old).isUnique()) {
+        throw new Error(getTranslation('ossAlreadyExists'))
+      }
     }
     dispatch(ossSlice.actions.addOssConfig(data))
   }

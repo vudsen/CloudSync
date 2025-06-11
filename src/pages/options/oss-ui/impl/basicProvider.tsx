@@ -5,6 +5,7 @@ import { OssType } from '@/oss/type.ts'
 import type { LocalOSSConfig } from '@/oss/remote/local.tsx'
 import { createLocalConfig } from '@/oss/remote/local.tsx'
 import { Checkbox } from '@heroui/react'
+import Translation from '@/component/Translation.tsx'
 
 const localOssProvider: OssUiProvider = {
   isSupported() {
@@ -23,9 +24,9 @@ const localOssProvider: OssUiProvider = {
     }))
 
     return (
-      <div>
+      <div className="my-3">
         <Checkbox isSelected={configuration.useSync} onValueChange={(value) => setConfiguration({ ...configuration, useSync: value })}>
-          Sync Data To Cloud
+          <Translation i18nKey="syncToCloud"/>
         </Checkbox>
       </div>
     )

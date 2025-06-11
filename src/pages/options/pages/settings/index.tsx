@@ -1,9 +1,10 @@
 import React from 'react'
+import Translation from '@/component/Translation.tsx'
 
 const Settings: React.FC = () => {
   return (
     <div>
-      We don't have any settings yet, but you can customize the extension here in the future.
+      <Translation i18nKey="settingEmpty"/>
     </div>
   )
 }

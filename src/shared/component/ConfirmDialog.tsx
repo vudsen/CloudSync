@@ -1,15 +1,17 @@
 import { useDisclosure } from '@heroui/react'
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@heroui/react'
 import React, { useImperativeHandle, useState } from 'react'
+import getTranslation from '@/util/getTranslation'
 
 export type DialogConfig = {
-  title: string
-  message?: string
+  title: React.ReactNode
+  message?: React.ReactNode
   confirmBtnText?: string
   cancelBtnText?: string
   onConfirm?: () => void
   onCancel?: () => void
   color?: 'primary' | 'danger'
+  hideCancel?: boolean
 }
 
 export interface ConfirmDialogRef {
@@ -24,8 +26,8 @@ interface ConfirmDialogProps {
 const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
   const [config, setConfig] = useState<DialogConfig>({
     title: '',
-    cancelBtnText: 'Cancel',
-    confirmBtnText: 'Confirm',
+    cancelBtnText: getTranslation('cancel'),
+    confirmBtnText: getTranslation('confirm'),
   })
   const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure()
 
@@ -37,8 +39,9 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
   useImperativeHandle(props.ref, () => ({
     showDialog(config) {
       setConfig({
-        cancelBtnText: 'Cancel',
-        confirmBtnText: 'Confirm',
+        cancelBtnText: getTranslation('cancel'),
+        confirmBtnText: getTranslation('confirm'),
+        hideCancel: false,
         ...config,
       })
       onOpen()
@@ -51,7 +54,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
         {onClose => (
           <>
             <ModalHeader>
-              <div className="text-primary text-lg font-bold">
+              <div className={`text-lg font-bold ${config.color === 'danger' ? 'text-danger' : 'text-primary'}`}>
                 {config.title}
               </div>
             </ModalHeader>
@@ -59,9 +62,12 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
               {config.message}
             </ModalBody>
             <ModalFooter>
-              <Button variant="light" color="primary" onPress={onClose}>
-                {config.cancelBtnText}
-              </Button>
+              { config.hideCancel ?
+                null :
+                <Button variant="light" color="primary" onPress={onClose}>
+                  {config.cancelBtnText}
+                </Button>
+              }
               <Button variant="solid" color={config.color} onPress={onConfirm}>
                 {config.confirmBtnText}
               </Button>
