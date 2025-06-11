@@ -37,7 +37,7 @@ const App = () => {
   }
 
   const gotoGitHub = () => {
-    chrome.tabs.create({ url: 'https://github.com/vudsen/storage-sync2-cloud' })
+    chrome.tabs.create({ url: 'https://github.com/vudsen/CloudSync' })
   }
 
   const host = tab.url ? (new URL(tab.url)).host : '<Unknown>'
