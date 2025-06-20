@@ -8,6 +8,7 @@ export interface OSS {
   getConfig(): BaseOSSConfig
   /**
    * 已使用的空间
+   * @return {Promise<number>} 已经使用的大小(字节)，如果不支持查询，返回负数
    */
   usedBytes(): Promise<number>
   /**
@@ -34,6 +35,7 @@ export interface OSSUIProvider {
 
 export enum OssType {
   ACCOUNT = 'Local Account',
+  CLOUDFLARE_KV = 'Cloudflare KV',
 }
 
 export type BaseOSSConfig = {

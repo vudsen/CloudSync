@@ -109,7 +109,6 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
       return
     }
 
-    console.log(selectedKeys)
     props.onSubmit({
       name: data.name,
       table: storage.filter(v => selectedKeys.has(v.name)),

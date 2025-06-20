@@ -121,7 +121,7 @@ const OssProviders:React.FC = () => {
               {
                 configs.map((provider) => (
                   <TableRow key={provider.type}>
-                    <TableCell>{provider.type}</TableCell>
+                    <TableCell>{provider.name}</TableCell>
                     <TableCell><UsedSize config={provider}/></TableCell>
                     <TableCell>
                       <Button color="primary" variant="flat" onPress={() => onUpdate(provider)}>

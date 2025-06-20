@@ -156,5 +156,8 @@
   },
   "applyStorage": {
     "message": "应用数据"
+  },
+  "syncAccountWarn": {
+    "message": "Chrome 账号限制每个用户的KV对最大大小为 8KB"
   }
 }

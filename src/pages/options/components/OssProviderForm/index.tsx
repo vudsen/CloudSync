@@ -9,7 +9,7 @@ export interface OssProviderFormProps {
   ref?: Ref<ConfigFormComponentRef>
 }
 
-const RenderUiProvider: React.FC<{provider: OssUiProvider, ref?: Ref<ConfigFormComponentRef>}> = props => {
+const RenderUiProvider: React.FC<{provider: OssUiProvider, ref?: Ref<ConfigFormComponentRef>, oldEntity?: BaseOSSConfig}> = props => {
   const [errorNode, setErrorNode] = useState<React.ReactNode | null>(null)
   const OssForm = props.provider.ConfigFormComponent
 
@@ -22,7 +22,7 @@ const RenderUiProvider: React.FC<{provider: OssUiProvider, ref?: Ref<ConfigFormC
   return (
     <div>
       { errorNode }
-      { errorNode ? null : <OssForm ref={props.ref}/>}
+      { errorNode ? null : <OssForm oldEntity={props.oldEntity} ref={props.ref}/>}
     </div>
   )
 }
@@ -38,7 +38,7 @@ const OssProviderForm: React.FC<OssProviderFormProps> = (props) => {
     <div>
       <OssSelector onChange={setOssType} initialValue={ossType}/>
       {
-        uiProvider ? <RenderUiProvider provider={uiProvider} ref={props.ref}/> : null
+        uiProvider ? <RenderUiProvider oldEntity={props.oldEntity} provider={uiProvider} ref={props.ref}/> : null
       }
     </div>
   )
