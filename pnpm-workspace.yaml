@@ -1,2 +1,3 @@
 packages:
-  - cloud-sync
+  - extension
+  - template/cloudflare
