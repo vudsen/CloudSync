@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router'
+import { createHashRouter } from 'react-router'
 import React from 'react'
 import Layout from './pages/layout.tsx'
 import type { RouteMeta } from './options-type.ts'
@@ -9,7 +9,7 @@ const Settings = React.lazy(() => import('./pages/settings'))
 const SiteDetail = React.lazy(() => import('./pages/detail'))
 const ViewRecordRoute = React.lazy(() => import('./pages/detail/view'))
 
-const RootRoutes = createBrowserRouter([
+const RootRoutes = createHashRouter([
   {
     element: <Layout />,
     children: [
@@ -43,6 +43,6 @@ const RootRoutes = createBrowserRouter([
       }
     ]
   }
-], { basename: '/pages/options.html' })
+])
 
 export default RootRoutes
