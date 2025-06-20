@@ -21,7 +21,7 @@ export default defineConfig({
     rollupOptions: {
       input: ['options.html', 'popup.html'],
       output: {
-        dir: 'extension/pages',
+        dir: 'release/pages',
       }
     }
   },

@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react()],
   build: {
     sourcemap: true,
-    outDir: 'extension/scripts',
+    outDir: 'release/scripts',
     lib: {
       name: 'cs',
       entry: ['./src/scripts/background.ts'],
