@@ -1,6 +1,3 @@
-import crypto from 'node:crypto'
-import { Buffer } from 'node:buffer'
-
 /**
  * Welcome to Cloudflare Workers! This is your first worker.
  *
@@ -13,34 +10,32 @@ import { Buffer } from 'node:buffer'
  *
  * Learn more at https://developers.cloudflare.com/workers/
  */
-
 export default {
   async fetch(request, env): Promise<Response> {
-    const searchParams = new URL(request.url).searchParams
-    const accountId = searchParams.get('accountId')
-    const namespaceId = searchParams.get('namespaceId')
-    const name = searchParams.get('name')
-    const encryptedApiToken = searchParams.get('apiToken')
-
-    const iv = Buffer.from(env.AES_IV, 'base64')
-    const decipher = crypto.createDecipheriv('aes-256-cbc', env.AES_SECRET, iv)
-    let decryptedApiToken = decipher.update(encryptedApiToken, 'utf-8', 'utf-8')
-    decryptedApiToken += decipher.final('utf-8')
-
-    const resp = await fetch(`https://api.cloudflare.com/client/v4/accounts/${accountId}/storage/kv/namespaces/${namespaceId}/values/${name}`, {
-      method: request.method,
-      body: await request.text(),
-      headers: {
-        'Authorization': decryptedApiToken,
-        'Content-Type': request.headers.get('Content-Type') ?? 'application/json',
-      }
+    const authorization = request.headers.get('Authorization')
+    if (!authorization || authorization !== env.TOKEN) {
+      // TODO, denied
+    }
+    const sp = new URL(request.url).searchParams
+    const key = sp.get('key')
+    if (!key) {
+      return new Response('Key not specified', {
+        status: 400
+      })
+    }
+    switch (request.method) {
+    case 'GET' : return new Response(await env.CLOUD_SYNC.get(key))
+    case 'POST' : {
+      await env.CLOUD_SYNC.put(key, await request.text())
+      return new Response()
+    }
+    case 'DELETE': {
+      await env.CLOUD_SYNC.delete(key)
+      return new Response()
+    }
+    default: return new Response('Unsupported method', {
+      status: 400
     })
-    return new Response(await resp.text(), {
-      status: resp.status,
-      statusText: resp.statusText,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-      }
-    })
+    }
   },
 } satisfies ExportedHandler<Env>

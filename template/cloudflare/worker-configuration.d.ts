@@ -6,8 +6,8 @@ declare namespace Cloudflare {
 	}
 }
 interface Env extends Cloudflare.Env {
-	AES_SECRET: string
-	AES_IV: string
+	CLOUD_SYNC: KVNamespace
+	TOKEN: string
 }
 
 // Begin runtime types
