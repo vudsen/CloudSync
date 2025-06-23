@@ -6,7 +6,7 @@ declare namespace Cloudflare {
 	}
 }
 interface Env extends Cloudflare.Env {
-	CLOUD_SYNC: KVNamespace
+	CloudSync: KVNamespace
 	TOKEN: string
 }
 

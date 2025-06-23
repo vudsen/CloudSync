@@ -24,13 +24,13 @@ export default {
       })
     }
     switch (request.method) {
-    case 'GET' : return new Response(await env.CLOUD_SYNC.get(key))
+    case 'GET' : return new Response(await env.CloudSync.get(key))
     case 'POST' : {
-      await env.CLOUD_SYNC.put(key, await request.text())
+      await env.CloudSync.put(key, await request.text())
       return new Response()
     }
     case 'DELETE': {
-      await env.CLOUD_SYNC.delete(key)
+      await env.CloudSync.delete(key)
       return new Response()
     }
     default: return new Response('Unsupported method', {
