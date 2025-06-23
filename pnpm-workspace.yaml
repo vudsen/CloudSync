@@ -1,3 +1,5 @@
 packages:
   - extension
   - template/cloudflare
+catalog:
+  '@types/node': ^20
