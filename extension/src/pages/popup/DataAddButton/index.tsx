@@ -68,23 +68,22 @@ const DataAddButton: React.FC<DataAddButtonProps> = props => {
         host: context.host
       }))
     }
-    promise.then(payload => {
-      if (isRejected(payload)) {
-        confirmDialog.current!.showDialog({
-          title: 'Save Failed',
-          message: getTranslationAsReactNode('saveFailed', payload.error.message),
-          color: 'danger'
-        })
-        console.error(payload)
-      } else {
-        confirmDialog.current!.showDialog({
-          title: getTranslationAsReactNode('saveSuccess'),
-          color: 'primary',
-          message: getTranslationAsReactNode('storageSaveSuccess', [data.table.length, data.oss.name]),
-        })
-        onClose()
-      }
-    })
+    const payload = await promise
+    if (isRejected(payload)) {
+      confirmDialog.current!.showDialog({
+        title: 'Save Failed',
+        message: getTranslationAsReactNode('saveFailed', payload.error.message),
+        color: 'danger'
+      })
+      console.error(payload)
+    } else {
+      confirmDialog.current!.showDialog({
+        title: getTranslationAsReactNode('saveSuccess'),
+        color: 'primary',
+        message: getTranslationAsReactNode('storageSaveSuccess', [data.table.length, data.oss.name]),
+      })
+      onClose()
+    }
   }
 
 
