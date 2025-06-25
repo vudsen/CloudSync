@@ -40,6 +40,7 @@ const ViewRecordRoute: React.FC = () => {
   }
 
   useEffect(() => {
+    setLoading(true)
     getHostDataById(host, id).then(r => {
       if (!r) {
         console.warn('host data not found')
@@ -54,9 +55,10 @@ const ViewRecordRoute: React.FC = () => {
       const template = createOssTemplate(ossConfig)
       template.queryStorages(r.remoteKey).then(r => {
         setItems(r)
+      }).finally(() => {
+        setLoading(false)
       })
     }).catch(createErrorHandler(getTranslationAsReactNode('failedToLoad'))).finally(() => {
-      setLoading(false)
     })
   }, [host, id])
 
@@ -84,8 +86,8 @@ const ViewRecordRoute: React.FC = () => {
             </TableHeader>
             <TableBody emptyContent={
               isLoading ?
-                <Spinner classNames={{ label: 'text-foreground mt-4' }} label="wave" variant="wave" /> :
-                'No data available.'}>
+                <Spinner classNames={{ label: 'text-foreground mt-4' }} label="Loading" variant="wave" /> :
+                <Translation i18nKey="noData"/>}>
               {
                 items.map(v => (
                   <TableRow key={v.name}>

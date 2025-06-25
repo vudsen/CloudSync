@@ -47,7 +47,7 @@ const DataAddButton: React.FC<DataAddButtonProps> = props => {
     }
   }))
 
-  const onSubmit = (data: SubmitData) => {
+  const onSubmit = async (data: SubmitData) => {
     let promise: Promise<unknown>
     if (oldEntity.current) {
       promise = dispatch(replacePageData({
@@ -82,9 +82,9 @@ const DataAddButton: React.FC<DataAddButtonProps> = props => {
           color: 'primary',
           message: getTranslationAsReactNode('storageSaveSuccess', [data.table.length, data.oss.name]),
         })
+        onClose()
       }
     })
-    onClose()
   }
 
 

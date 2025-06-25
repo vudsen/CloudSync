@@ -159,5 +159,8 @@
   },
   "syncAccountWarn": {
     "message": "Chrome 账号限制每个用户的KV对最大大小为 8KB"
+  },
+  "unsupported": {
+    "message": "暂不支持"
   }
 }

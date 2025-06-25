@@ -29,7 +29,7 @@ export type SubmitData = {
 }
 
 interface LocalStoragePresentProps {
-  onSubmit: (data: SubmitData) => void
+  onSubmit: (data: SubmitData) => Promise<void>
   onCancel: () => void
   oldState?: HostData
 }
@@ -43,7 +43,8 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
   const configs = useAppSelector(state => state.oss.configs)
   const context = useContext(PopupContext)
   const host = context.host
-  const [loading, setLoading] = useState(false)
+  const [tableLoading, setTableLoading] = useState(false)
+  const [submitLoading, setSubmitLoading] = useState(false)
 
   const formRef = useRef<HTMLFormElement>(null)
   const {
@@ -52,7 +53,7 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
   } = useForm<Inputs>()
 
   useEffect(() => {
-    setLoading(true)
+    setTableLoading(true)
     ;(async () => {
       if (!context.tab.id) {
         return
@@ -84,7 +85,7 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
         color: 'danger',
       })
     }).finally(() => {
-      setLoading(false)
+      setTableLoading(false)
     })
   }, [context.tab.id])
 
@@ -109,10 +110,13 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
       return
     }
 
+    setSubmitLoading(true)
     props.onSubmit({
       name: data.name,
       table: storage.filter(v => selectedKeys.has(v.name)),
       oss: configs.find(v => v.id === data.oss)!,
+    }).finally(() => {
+      setSubmitLoading(false)
     })
   }
 
@@ -183,7 +187,7 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
             <TableColumn><Translation i18nKey="name"/></TableColumn>
             <TableColumn><Translation i18nKey="actions"/></TableColumn>
           </TableHeader>
-          <TableBody isLoading={loading} loadingContent={<Spinner label="Loading..." />} items={storage} emptyContent={
+          <TableBody isLoading={tableLoading} loadingContent={<Spinner label="Loading..." />} items={storage} emptyContent={
             <p className="text-ellipsis overflow-hidden">
               <Translation i18nKey="noDataOnSite" args={[host]} />
             </p>
@@ -205,7 +209,7 @@ const LocalStoragePresent: React.FC<LocalStoragePresentProps> = (props) => {
           </TableBody>
         </Table>
         <div className="flex flex-row-reverse my-4">
-          <Button type="submit" color="primary">
+          <Button type="submit" color="primary" isLoading={submitLoading}>
             {props.oldState ? <Translation i18nKey="update"/> : <Translation i18nKey="save"/>}
           </Button>
           <Button variant="light" color="danger" onPress={props.onCancel} className="mx-2">

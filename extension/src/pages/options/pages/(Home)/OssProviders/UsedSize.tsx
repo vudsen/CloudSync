@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import type { BaseOSSConfig } from '@/oss/type.ts'
 import { createOSSInstance } from '@/oss/factory.ts'
 import { Skeleton } from '@heroui/react'
+import Translation from '@/component/Translation.tsx'
 
 interface UsedSizeProps {
   config: BaseOSSConfig
@@ -27,7 +28,7 @@ export const UsedSize: React.FC<UsedSizeProps> = (props) => {
   }
   return (
     <div>
-      {size} byte
+      { size < 0 ? <Translation i18nKey="unsupported"/> : `${size} byte`}
     </div>
   )
 }

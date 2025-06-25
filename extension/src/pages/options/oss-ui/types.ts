@@ -12,7 +12,7 @@ export interface ConfigFormComponentRef {
   /**
    * 获取表单数据，返回空表示校验失败
    */
-  apply: () => BaseOSSConfig | undefined
+  apply: () => Promise<BaseOSSConfig | undefined>
 }
 
 export interface OssUiProvider {

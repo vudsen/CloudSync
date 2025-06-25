@@ -20,7 +20,7 @@ import { showDialog } from '@/component/DialogProvider.tsx'
 import { addToast } from '@heroui/toast'
 import type { BaseOSSConfig } from '@/oss/type.ts'
 import Translation from '@/component/Translation.tsx'
-import getTranslation from "@/util/getTranslation";
+import getTranslation from '@/util/getTranslation'
 
 
 
@@ -31,8 +31,8 @@ const OssProviders:React.FC = () => {
   const form = useRef<ConfigFormComponentRef>(null)
   const [ oldEntity, setOldEntity ] = useState<BaseOSSConfig>()
 
-  const onSave = () => {
-    const data = form.current!.apply()
+  const onSave = async () => {
+    const data = await form.current!.apply()
     if (!data) {
       return
     }
@@ -127,7 +127,7 @@ const OssProviders:React.FC = () => {
                       <Button color="primary" variant="flat" onPress={() => onUpdate(provider)}>
                         <Translation i18nKey="update"/>
                       </Button>
-                      &nbsp;
+                      <span> </span>
                       <Button color="danger" variant="flat" onPress={() => onDelete(provider)}>
                         <Translation i18nKey="delete"/>
                       </Button>

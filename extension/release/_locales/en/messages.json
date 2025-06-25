@@ -158,6 +158,9 @@
     "message": "Apply data"
   },
   "syncAccountWarn": {
-    "message": "Chrome 账号限制每个用户的KV对最大大小为 8KB"
+    "message": "Chrome accounts limit the maximum size of each user's KV pair to 8KB"
+  },
+  "unsupported": {
+    "message": "Unsupported"
   }
 }

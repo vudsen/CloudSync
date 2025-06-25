@@ -2,9 +2,8 @@ import type { BaseOSSConfig, OSS } from '@/oss/type.ts'
 import { OssType } from '@/oss/type.ts'
 
 type MyCloudflareConfig = {
-  apiToken: string
-  namespaceId: string
-  accountId: string
+  endpoint: string
+  token: string
 }
 
 export type CloudflareOSSConfig = BaseOSSConfig & MyCloudflareConfig
@@ -18,9 +17,8 @@ export function createCloudflareConfig(config: Constructor): CloudflareOSSConfig
     name: 'Cloudflare KV',
     id: config.id,
     type: OssType.CLOUDFLARE_KV,
-    accountId: config.accountId,
-    apiToken: config.apiToken,
-    namespaceId: config.namespaceId,
+    endpoint: config.endpoint,
+    token: config.token,
   }
 }
 
@@ -32,21 +30,22 @@ export class CloudflareOSS implements OSS {
     this.config = createCloudflareConfig(cons)
   }
 
-  private checkResponse(response: Response): Promise<void> {
+  private async doRequest(method: string, key: string, body?: string): Promise<string> {
+    const response = await fetch(`${this.config.endpoint}?key=${key}`, {
+      headers: {
+        'Authorization': this.config.token,
+      },
+      body,
+      method
+    })
     if (response.status >= 200 && response.status < 300) {
-      return Promise.resolve()
+      return Promise.resolve(response.text())
     }
-    return Promise.reject(response.text())
+    return Promise.reject(new Error(`body: ${await response.text()}, statusCode: ${response.status}`))
   }
 
   async delete(name: string): Promise<void> {
-    const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${this.config.accountId}/storage/kv/namespaces/${this.config.namespaceId}/values/${name}`, {
-      method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${this.config.apiToken}`,
-      }
-    })
-    return this.checkResponse(response)
+    await this.doRequest('DELETE', name)
   }
 
   getConfig(): BaseOSSConfig {
@@ -54,15 +53,7 @@ export class CloudflareOSS implements OSS {
   }
 
   async insert(name: string, data: string): Promise<void> {
-    const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${this.config.accountId}/storage/kv/namespaces/${this.config.namespaceId}/values/${name}`, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${this.config.apiToken}`,
-        'Content-Type': 'application/json'
-      },
-      body: data
-    })
-    return this.checkResponse(response)
+    await this.doRequest('PUT', name, data)
   }
 
   isUnique(): boolean {
@@ -70,16 +61,7 @@ export class CloudflareOSS implements OSS {
   }
 
   async query(name: string): Promise<string | undefined> {
-    const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${this.config.accountId}/storage/kv/namespaces/${this.config.namespaceId}/values/${name}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${this.config.apiToken}`,
-      }
-    })
-    if (!response.ok) {
-      return Promise.reject(response.text())
-    }
-    return response.text()
+    return this.doRequest('GET', name)
   }
 
   update(name: string, data: string): Promise<void> {
