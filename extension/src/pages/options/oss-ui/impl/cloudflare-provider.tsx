@@ -7,6 +7,7 @@ import Translation from '@/component/Translation.tsx'
 import { OssType } from '@/oss/type.ts'
 import { registerUiProvider } from '../factory.ts'
 import ControlledInput from '@/component/validation/ControlledInput.tsx'
+import {Link} from "@heroui/react";
 
 type Inputs = {
   name: string
@@ -43,6 +44,10 @@ const cloudflareProvider: OssUiProvider = {
       }
     }))
 
+    const gotoDocumentation = () => {
+      chrome.tabs.create({ url: 'https://github.com/vudsen/CloudSync/tree/master/template/cloudflare' })
+    }
+
     return (
       <form className="my-3 space-y-3">
         <ControlledInput
@@ -55,7 +60,7 @@ const cloudflareProvider: OssUiProvider = {
           rules={{ required: true }}
           control={control}
           name="endpoint"
-          inputProps={{ label: 'Endpoint', isRequired: true, defaultValue: entity?.endpoint }}
+          inputProps={{ label: 'Endpoint', isRequired: true, defaultValue: entity?.endpoint, placeholder: 'https://<namespace_name>.<username>.workers.dev' }}
         />
         <ControlledInput
           control={control}
@@ -63,6 +68,9 @@ const cloudflareProvider: OssUiProvider = {
           rules={{ required: true }}
           inputProps={{ label: 'Token', isRequired: true, defaultValue: entity?.token }}
         />
+        <Link size="sm" color="primary" isBlock showAnchorIcon className="cursor-pointer" onPress={gotoDocumentation}>
+          <Translation i18nKey="documentation"/>
+        </Link>
       </form>
     )
   }

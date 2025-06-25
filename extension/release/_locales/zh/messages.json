@@ -162,5 +162,11 @@
   },
   "unsupported": {
     "message": "暂不支持"
+  },
+  "documentation": {
+    "message": "文档"
+  },
+  "cloudflareDescription": {
+    "message": "将数据存储到 Cloudflare KV 中"
   }
 }

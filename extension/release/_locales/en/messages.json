@@ -162,5 +162,11 @@
   },
   "unsupported": {
     "message": "Unsupported"
+  },
+  "documentation": {
+    "message": "Documentation"
+  },
+  "cloudflareDescription": {
+    "message": "Store your data to Cloudflare KV!"
   }
 }
