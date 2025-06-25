@@ -18,3 +18,8 @@
 1. 进入任意页面，点击拓展打开弹出框。
 2. 找到要恢复的记录，点击 `Apply`。
 3. 刷新界面以进行恢复。
+
+## 支持的云端
+
+- Chrome 账号: 每个值最大为 8KB
+- [cloudflare KV](https://github.com/vudsen/CloudSync/tree/master/template/cloudflare): 每个值最大为 1GB(免费计划)

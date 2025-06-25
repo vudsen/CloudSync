@@ -1,0 +1,166 @@
+{
+  "saveCurrentPage": {
+    "message": "Save current page"
+  },
+  "noData": {
+    "message": "No data available"
+  },
+  "noDataOnSite": {
+    "message": "No data available on $host$",
+    "placeholders": {
+      "host": {
+        "content": "$1"
+      }
+    }
+  },
+  "options": {
+    "message": "Options"
+  },
+  "name": {
+    "message": "Name"
+  },
+  "actions": {
+    "message": "Actions"
+  },
+  "ossProvider": {
+    "message": "OSS Provider"
+  },
+  "save": {
+    "message": "Save"
+  },
+  "close": {
+    "message": "Close"
+  },
+  "view": {
+    "message": "View"
+  },
+  "apply": {
+    "message": "Apply"
+  },
+  "error": {
+    "message": "Error"
+  },
+  "atLeastSelectOne": {
+    "message": "Select at least one row in the table"
+  },
+  "home": {
+    "message": "Home"
+  },
+  "settings": {
+    "message": "Settings"
+  },
+  "savedSites": {
+    "message": "Saved Sites"
+  },
+  "usedBytes": {
+    "message": "Occupied Size"
+  },
+  "createOssProvider": {
+    "message": "Create OSS Provider"
+  },
+  "detail": {
+    "message": "Detail"
+  },
+  "update": {
+    "message": "Update"
+  },
+  "updateOssProvider": {
+    "message": "Update OSS Provider"
+  },
+  "selectOssProvider": {
+    "message": "Select a OSS Provider"
+  },
+  "syncToCloud": {
+    "message": "Sync data to the cloud"
+  },
+  "saveDataToYourAccount": {
+    "message": "Save data to your account"
+  },
+  "delete": {
+    "message": "Delete"
+  },
+  "localOss": {
+    "message": "Local"
+  },
+  "localOssDescription": {
+    "message": "The local OSS provider is used to store data in the local browser, and you can also choose to save the data to your account."
+  },
+  "ossAlreadyExists": {
+    "message": "This OSS does not allow the creation of multiple"
+  },
+  "createFailed": {
+    "message": "Creation failed"
+  },
+  "cancel": {
+    "message": "Cancel"
+  },
+  "confirm": {
+    "message": "Confirm"
+  },
+  "settingEmpty": {
+    "message": "There aren't any settings for this yet, but there may be in the future..."
+  },
+  "storageReady": {
+    "message": "The data is ready, refresh the page to replace localStorage"
+  },
+  "deleteTip": {
+    "message": "Are you sure you want to delete this record??"
+  },
+  "deleteOssTip": {
+    "message": "Are you sure you want to delete this OSS?"
+  },
+  "saveFailed": {
+    "message": "Save failed: $reason$",
+    "placeholders": {
+      "reason": {
+        "content": "$1"
+      }
+    }
+  },
+  "storageSaveSuccess": {
+    "message": "Successfully saved $count$ pieces of data to $ossName$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "ossName": {
+        "content": "$2"
+      }
+    }
+  },
+  "saveSuccess": {
+    "message": "Saved successfully"
+  },
+  "siteDetail": {
+    "message": "Site Detail"
+  },
+  "storageDetail": {
+    "message": "Storage Detail"
+  },
+  "clickToShowAll": {
+    "message": "Click to show all ($count$ characters)",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "failedToLoad": {
+    "message": "Loading failed"
+  },
+  "unknownError": {
+    "message": "Unknown error"
+  },
+  "applyStorageMsg": {
+    "message": "Are you sure you want to apply this data? This will overwrite the current localStorage data."
+  },
+  "applyStorage": {
+    "message": "Apply data"
+  },
+  "syncAccountWarn": {
+    "message": "Chrome accounts limit the maximum size of each user's KV pair to 8KB"
+  },
+  "unsupported": {
+    "message": "Unsupported"
+  }
+}

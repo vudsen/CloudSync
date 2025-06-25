@@ -1,55 +1,13 @@
 {
   "name": "cloud-sync",
-  "private": true,
   "version": "0.0.1",
   "type": "module",
-  "scripts": {
-    "prepare:dev": "cross-env NODE_ENV=development node script/prepare-dev.mjs",
-    "dev": "cross-env NODE_ENV=development vite --config script/vite/pages.config.ts",
-    "dev:scripts": "cross-env NODE_ENV=development vite build --config script/vite/scripts.config.ts --watch",
-    "build": "cross-env NODE_ENV=production node script/build-all.mjs",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@heroui/react": "2.8.0-beta.2",
-    "@heroui/system": "2.4.10",
-    "@heroui/theme": "2.4.14-beta.2",
-    "@heroui/toast": "^2.0.7",
-    "@reduxjs/toolkit": "^2.5.0",
-    "framer-motion": "^12.7.4",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "react-error-boundary": "^5.0.0",
-    "react-hook-form": "^7.56.0",
-    "react-redux": "^9.2.0",
-    "react-router": "^7.1.3",
-    "redux-persist": "^6.0.0"
-  },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
-    "@react-types/shared": "^3.26.0",
-    "@tailwindcss/postcss": "^4.1.4",
-    "@tailwindcss/vite": "^4.1.4",
-    "@types/node": "^20",
-    "@types/react": "^19.0.7",
-    "@types/react-dom": "^19.0.3",
-    "@vitejs/plugin-react-swc": "^3.5.0",
-    "autoprefixer": "^10.4.20",
-    "chrome-types": "^0.1.329",
-    "cross-env": "^7.0.3",
-    "cross-iframe-rpc": "^1.2.1",
     "eslint": "^9.17.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
-    "install": "^0.13.0",
-    "postcss": "^8.4.49",
-    "rollup-plugin-copy": "^3.5.0",
-    "rollup-plugin-visualizer": "^5.14.0",
-    "tailwindcss": "^4.1.4",
-    "typescript": "~5.6.2",
-    "typescript-eslint": "^8.18.2",
-    "vite": "^6.0.5"
+    "typescript-eslint": "^8.18.2"
   }
 }
